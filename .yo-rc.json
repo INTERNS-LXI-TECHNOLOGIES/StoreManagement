@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.lxisoft.store",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.6.0",
+    "applicationType": "gateway",
+    "baseName": "StoreManagement",
+    "packageName": "com.lxisoft.store",
+    "packageFolder": "com/lxisoft/store",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OGEzOGY2ODI2MzBhN2Y3ZTgyYzFiNjUxODNkNjMyMjlkNzQ4MjkxY2RjOGUwNGE3NmJmOWMzN2IzZjA5MmExYjAzOGM4ODcxOGJlYzNmYzY2ZDQ3MGQ4NDY3N2FmMDdmNGI4NmQzZjM0MWRiODZhYzk0ZmUzMDFkZGRiNjE1YjM=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "skipClient": true,
+    "creationTimestamp": 1592368913123,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en"],
+    "blueprints": []
+  }
+}
