@@ -1,0 +1,32 @@
+{
+    "name": "Customer",
+    "fields": [
+        {
+            "fieldName": "idpCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "store",
+            "otherEntityRelationshipName": "customer",
+            "relationshipName": "store",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200618083132",
+    "entityTableName": "customer",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

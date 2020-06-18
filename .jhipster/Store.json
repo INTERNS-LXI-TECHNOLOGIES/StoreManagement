@@ -1,0 +1,33 @@
+{
+    "name": "Store",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "product",
+            "otherEntityRelationshipName": "store",
+            "relationshipName": "product"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "store",
+            "relationshipName": "customer"
+        }
+    ],
+    "changelogDate": "20200618083130",
+    "entityTableName": "store",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

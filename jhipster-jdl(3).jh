@@ -1,0 +1,30 @@
+entity Store{
+	name String
+}
+
+entity Product {
+	name String,
+	category String,
+	quantity String,
+	price Double,
+	manufacturingDate Instant,
+	expiringDate Instant
+	} 
+	
+entity Customer{
+	idpCode String,
+	name String
+}
+
+enum Role {
+    ADMIN,CUSTOMER
+}
+
+relationship OneToMany{
+	Store{product} to Product{store},
+	Store{customer} to Customer{store}
+}
+
+service all with serviceImpl
+
+dto * with mapstruct
