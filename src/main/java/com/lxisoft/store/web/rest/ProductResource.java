@@ -115,4 +115,10 @@ public class ProductResource {
         productService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+    
+    @GetMapping("/findAllProductByCategory/{category}")
+    public Optional<List<ProductDTO>> findAllByCategory(@PathVariable String category) {
+        log.debug("REST request to get all Products");
+        return productService.findAllByCategory(category);
+    }
 }

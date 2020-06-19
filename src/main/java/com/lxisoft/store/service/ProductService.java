@@ -40,4 +40,6 @@ public interface ProductService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+	Optional<List<ProductDTO>> findAllByCategory(String category);
 }
