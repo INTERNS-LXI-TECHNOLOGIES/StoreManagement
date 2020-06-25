@@ -1,0 +1,37 @@
+{
+    "name": "Stock",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "noOfItem",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "category",
+            "otherEntityRelationshipName": "stock",
+            "relationshipName": "category"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "product",
+            "otherEntityRelationshipName": "stock",
+            "relationshipName": "product"
+        }
+    ],
+    "changelogDate": "20200625055225",
+    "entityTableName": "stock",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

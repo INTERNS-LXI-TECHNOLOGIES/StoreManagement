@@ -5,6 +5,8 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Product.
@@ -22,8 +24,8 @@ public class Product implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "quantity")
     private String quantity;
@@ -37,9 +39,23 @@ public class Product implements Serializable {
     @Column(name = "expiring_date")
     private Instant expiringDate;
 
+    @Column(name = "warrenty")
+    private String warrenty;
+
+    @OneToMany(mappedBy = "product")
+    private Set<Sale> sales = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties("products")
     private Store store;
+
+    @ManyToOne
+    @JsonIgnoreProperties("products")
+    private Category category;
+
+    @ManyToOne
+    @JsonIgnoreProperties("products")
+    private Stock stock;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -63,17 +79,17 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getDescription() {
+        return description;
     }
 
-    public Product category(String category) {
-        this.category = category;
+    public Product description(String description) {
+        this.description = description;
         return this;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getQuantity() {
@@ -128,6 +144,44 @@ public class Product implements Serializable {
         this.expiringDate = expiringDate;
     }
 
+    public String getWarrenty() {
+        return warrenty;
+    }
+
+    public Product warrenty(String warrenty) {
+        this.warrenty = warrenty;
+        return this;
+    }
+
+    public void setWarrenty(String warrenty) {
+        this.warrenty = warrenty;
+    }
+
+    public Set<Sale> getSales() {
+        return sales;
+    }
+
+    public Product sales(Set<Sale> sales) {
+        this.sales = sales;
+        return this;
+    }
+
+    public Product addSale(Sale sale) {
+        this.sales.add(sale);
+        sale.setProduct(this);
+        return this;
+    }
+
+    public Product removeSale(Sale sale) {
+        this.sales.remove(sale);
+        sale.setProduct(null);
+        return this;
+    }
+
+    public void setSales(Set<Sale> sales) {
+        this.sales = sales;
+    }
+
     public Store getStore() {
         return store;
     }
@@ -139,6 +193,32 @@ public class Product implements Serializable {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Product category(Category category) {
+        this.category = category;
+        return this;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public Product stock(Stock stock) {
+        this.stock = stock;
+        return this;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -163,11 +243,12 @@ public class Product implements Serializable {
         return "Product{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", category='" + getCategory() + "'" +
+            ", description='" + getDescription() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
             ", manufacturingDate='" + getManufacturingDate() + "'" +
             ", expiringDate='" + getExpiringDate() + "'" +
+            ", warrenty='" + getWarrenty() + "'" +
             "}";
     }
 }

@@ -41,8 +41,8 @@ public class ProductResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
-    private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final String DEFAULT_QUANTITY = "AAAAAAAAAA";
     private static final String UPDATED_QUANTITY = "BBBBBBBBBB";
@@ -55,6 +55,9 @@ public class ProductResourceIT {
 
     private static final Instant DEFAULT_EXPIRING_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_EXPIRING_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final String DEFAULT_WARRENTY = "AAAAAAAAAA";
+    private static final String UPDATED_WARRENTY = "BBBBBBBBBB";
 
     @Autowired
     private ProductRepository productRepository;
@@ -105,11 +108,12 @@ public class ProductResourceIT {
     public static Product createEntity(EntityManager em) {
         Product product = new Product()
             .name(DEFAULT_NAME)
-            .category(DEFAULT_CATEGORY)
+            .description(DEFAULT_DESCRIPTION)
             .quantity(DEFAULT_QUANTITY)
             .price(DEFAULT_PRICE)
             .manufacturingDate(DEFAULT_MANUFACTURING_DATE)
-            .expiringDate(DEFAULT_EXPIRING_DATE);
+            .expiringDate(DEFAULT_EXPIRING_DATE)
+            .warrenty(DEFAULT_WARRENTY);
         return product;
     }
     /**
@@ -121,11 +125,12 @@ public class ProductResourceIT {
     public static Product createUpdatedEntity(EntityManager em) {
         Product product = new Product()
             .name(UPDATED_NAME)
-            .category(UPDATED_CATEGORY)
+            .description(UPDATED_DESCRIPTION)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
             .manufacturingDate(UPDATED_MANUFACTURING_DATE)
-            .expiringDate(UPDATED_EXPIRING_DATE);
+            .expiringDate(UPDATED_EXPIRING_DATE)
+            .warrenty(UPDATED_WARRENTY);
         return product;
     }
 
@@ -151,11 +156,12 @@ public class ProductResourceIT {
         assertThat(productList).hasSize(databaseSizeBeforeCreate + 1);
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testProduct.getCategory()).isEqualTo(DEFAULT_CATEGORY);
+        assertThat(testProduct.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProduct.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testProduct.getManufacturingDate()).isEqualTo(DEFAULT_MANUFACTURING_DATE);
         assertThat(testProduct.getExpiringDate()).isEqualTo(DEFAULT_EXPIRING_DATE);
+        assertThat(testProduct.getWarrenty()).isEqualTo(DEFAULT_WARRENTY);
     }
 
     @Test
@@ -191,11 +197,12 @@ public class ProductResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].manufacturingDate").value(hasItem(DEFAULT_MANUFACTURING_DATE.toString())))
-            .andExpect(jsonPath("$.[*].expiringDate").value(hasItem(DEFAULT_EXPIRING_DATE.toString())));
+            .andExpect(jsonPath("$.[*].expiringDate").value(hasItem(DEFAULT_EXPIRING_DATE.toString())))
+            .andExpect(jsonPath("$.[*].warrenty").value(hasItem(DEFAULT_WARRENTY)));
     }
     
     @Test
@@ -210,11 +217,12 @@ public class ProductResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(product.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.manufacturingDate").value(DEFAULT_MANUFACTURING_DATE.toString()))
-            .andExpect(jsonPath("$.expiringDate").value(DEFAULT_EXPIRING_DATE.toString()));
+            .andExpect(jsonPath("$.expiringDate").value(DEFAULT_EXPIRING_DATE.toString()))
+            .andExpect(jsonPath("$.warrenty").value(DEFAULT_WARRENTY));
     }
 
     @Test
@@ -239,11 +247,12 @@ public class ProductResourceIT {
         em.detach(updatedProduct);
         updatedProduct
             .name(UPDATED_NAME)
-            .category(UPDATED_CATEGORY)
+            .description(UPDATED_DESCRIPTION)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
             .manufacturingDate(UPDATED_MANUFACTURING_DATE)
-            .expiringDate(UPDATED_EXPIRING_DATE);
+            .expiringDate(UPDATED_EXPIRING_DATE)
+            .warrenty(UPDATED_WARRENTY);
         ProductDTO productDTO = productMapper.toDto(updatedProduct);
 
         restProductMockMvc.perform(put("/api/products")
@@ -256,11 +265,12 @@ public class ProductResourceIT {
         assertThat(productList).hasSize(databaseSizeBeforeUpdate);
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testProduct.getCategory()).isEqualTo(UPDATED_CATEGORY);
+        assertThat(testProduct.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProduct.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testProduct.getManufacturingDate()).isEqualTo(UPDATED_MANUFACTURING_DATE);
         assertThat(testProduct.getExpiringDate()).isEqualTo(UPDATED_EXPIRING_DATE);
+        assertThat(testProduct.getWarrenty()).isEqualTo(UPDATED_WARRENTY);
     }
 
     @Test

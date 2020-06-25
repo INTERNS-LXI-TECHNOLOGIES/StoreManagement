@@ -1,0 +1,43 @@
+{
+    "name": "Sale",
+    "fields": [
+        {
+            "fieldName": "noOfProduct",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "date",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "sale",
+            "relationshipName": "customer",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "product",
+            "otherEntityRelationshipName": "sale",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200625055226",
+    "entityTableName": "sale",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

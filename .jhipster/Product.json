@@ -6,7 +6,7 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "category",
+            "fieldName": "description",
             "fieldType": "String"
         },
         {
@@ -24,14 +24,38 @@
         {
             "fieldName": "expiringDate",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "warrenty",
+            "fieldType": "String"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "sale",
+            "otherEntityRelationshipName": "product",
+            "relationshipName": "sale"
+        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "store",
             "otherEntityRelationshipName": "product",
             "relationshipName": "store",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "category",
+            "otherEntityRelationshipName": "product",
+            "relationshipName": "category",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "stock",
+            "otherEntityRelationshipName": "product",
+            "relationshipName": "stock",
             "otherEntityField": "id"
         }
     ],

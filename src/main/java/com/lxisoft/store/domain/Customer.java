@@ -24,6 +24,10 @@ public class Customer implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Sale sale;
+
     @ManyToOne
     @JsonIgnoreProperties("customers")
     private Store store;
@@ -61,6 +65,19 @@ public class Customer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public Customer sale(Sale sale) {
+        this.sale = sale;
+        return this;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
     }
 
     public Store getStore() {

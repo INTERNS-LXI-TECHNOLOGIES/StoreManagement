@@ -14,5 +14,17 @@
                                  referencedColumnNames="id"
                                  referencedTableName="store"/>
 
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="product"
+                                 constraintName="fk_product_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="category"/>
+
+        <addForeignKeyConstraint baseColumnNames="stock_id"
+                                 baseTableName="product"
+                                 constraintName="fk_product_stock_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="stock"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -18,6 +18,12 @@
             "otherEntityName": "customer",
             "otherEntityRelationshipName": "store",
             "relationshipName": "customer"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "category",
+            "otherEntityRelationshipName": "store",
+            "relationshipName": "category"
         }
     ],
     "changelogDate": "20200618083130",

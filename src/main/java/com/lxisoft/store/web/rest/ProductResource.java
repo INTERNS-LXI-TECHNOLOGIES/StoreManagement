@@ -1,6 +1,5 @@
 package com.lxisoft.store.web.rest;
 
-import com.lxisoft.store.security.AuthoritiesConstants;
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.web.rest.errors.BadRequestAlertException;
 import com.lxisoft.store.service.dto.ProductDTO;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -47,8 +45,7 @@ public class ProductResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new productDTO, or with status {@code 400 (Bad Request)} if the product has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/admin/products")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PostMapping("/products")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) throws URISyntaxException {
         log.debug("REST request to save Product : {}", productDTO);
         if (productDTO.getId() != null) {
@@ -69,8 +66,7 @@ public class ProductResource {
      * or with status {@code 500 (Internal Server Error)} if the productDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/admin/products")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PutMapping("/products")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) throws URISyntaxException {
         log.debug("REST request to update Product : {}", productDTO);
         if (productDTO.getId() == null) {
@@ -113,17 +109,10 @@ public class ProductResource {
      * @param id the id of the productDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/admin/products/{id}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         log.debug("REST request to delete Product : {}", id);
         productService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
-    }
-    
-    @GetMapping("/findAllProductByCategory/{category}")
-    public Optional<List<ProductDTO>> findAllByCategory(@PathVariable String category) {
-        log.debug("REST request to get all Products");
-        return productService.findAllByCategory(category);
     }
 }

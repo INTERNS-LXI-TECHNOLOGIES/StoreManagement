@@ -1,0 +1,45 @@
+{
+    "name": "Category",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "product",
+            "otherEntityRelationshipName": "category",
+            "relationshipName": "product"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "store",
+            "otherEntityRelationshipName": "category",
+            "relationshipName": "store",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "stock",
+            "otherEntityRelationshipName": "category",
+            "relationshipName": "stock",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200625055224",
+    "entityTableName": "category",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

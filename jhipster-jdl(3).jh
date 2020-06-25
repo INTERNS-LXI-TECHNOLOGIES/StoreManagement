@@ -4,25 +4,47 @@ entity Store{
 
 entity Product {
 	name String,
-	category String,
+	description String,
 	quantity String,
 	price Double,
 	manufacturingDate Instant,
-	expiringDate Instant
+	expiringDate Instant,
+	warrenty String
 	} 
+	
+entity Category	{
+    name String,
+	description String,
+	}
+
+entity Stock{
+	description String,
+	noOfItem Long
+	}
+	
+entity Sale{
+    noOfProduct Long,
+	date Instant,
+	amount Double
+	}
 	
 entity Customer{
 	idpCode String,
 	name String
 }
 
-enum Role {
-    ADMIN,CUSTOMER
-}
-
 relationship OneToMany{
 	Store{product} to Product{store},
-	Store{customer} to Customer{store}
+	Store{customer} to Customer{store},
+	Store{category} to Category{store},
+	Category{product} to Product{category},
+	Stock{category} to Category{stock},
+	Stock{product} to Product{stock},
+	Product{sale} to Sale{product}
+}
+
+relationship OneToOne{
+Customer{sale} to Sale{customer}
 }
 
 service all with serviceImpl

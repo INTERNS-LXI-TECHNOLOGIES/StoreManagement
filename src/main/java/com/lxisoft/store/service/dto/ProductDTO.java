@@ -12,7 +12,7 @@ public class ProductDTO implements Serializable {
 
     private String name;
 
-    private String category;
+    private String description;
 
     private String quantity;
 
@@ -22,8 +22,14 @@ public class ProductDTO implements Serializable {
 
     private Instant expiringDate;
 
+    private String warrenty;
+
 
     private Long storeId;
+
+    private Long categoryId;
+
+    private Long stockId;
 
     public Long getId() {
         return id;
@@ -41,12 +47,12 @@ public class ProductDTO implements Serializable {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getQuantity() {
@@ -81,12 +87,36 @@ public class ProductDTO implements Serializable {
         this.expiringDate = expiringDate;
     }
 
+    public String getWarrenty() {
+        return warrenty;
+    }
+
+    public void setWarrenty(String warrenty) {
+        this.warrenty = warrenty;
+    }
+
     public Long getStoreId() {
         return storeId;
     }
 
     public void setStoreId(Long storeId) {
         this.storeId = storeId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(Long stockId) {
+        this.stockId = stockId;
     }
 
     @Override
@@ -115,12 +145,15 @@ public class ProductDTO implements Serializable {
         return "ProductDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", category='" + getCategory() + "'" +
+            ", description='" + getDescription() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
             ", manufacturingDate='" + getManufacturingDate() + "'" +
             ", expiringDate='" + getExpiringDate() + "'" +
+            ", warrenty='" + getWarrenty() + "'" +
             ", storeId=" + getStoreId() +
+            ", categoryId=" + getCategoryId() +
+            ", stockId=" + getStockId() +
             "}";
     }
 }
