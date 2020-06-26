@@ -114,8 +114,8 @@ public class QueryResource {
 	 *
 	 */
 	@GetMapping("/findStockByProductId/{productId}")
-	public  long findStockByProduct(@PathVariable String productId) {
-		log.debug("<<<<< findProduct >>>>>>");
+	public  long findStockByProductId(@PathVariable String productId) {
+		log.debug("<<<<< findStockByProductId >>>>>>");
 		long id = Long.parseLong(productId);
 		return stockService.findOne(productService.findOne(id).get().getStockId()).get().getNoOfItem();
 	}
