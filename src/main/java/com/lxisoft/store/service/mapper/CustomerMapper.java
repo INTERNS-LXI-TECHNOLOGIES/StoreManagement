@@ -1,5 +1,6 @@
 package com.lxisoft.store.service.mapper;
 
+
 import com.lxisoft.store.domain.*;
 import com.lxisoft.store.service.dto.CustomerDTO;
 
@@ -14,7 +15,8 @@ public interface CustomerMapper extends EntityMapper<CustomerDTO, Customer> {
     @Mapping(source = "store.id", target = "storeId")
     CustomerDTO toDto(Customer customer);
 
-    @Mapping(target = "sale", ignore = true)
+    @Mapping(target = "sales", ignore = true)
+    @Mapping(target = "removeSale", ignore = true)
     @Mapping(source = "storeId", target = "store")
     Customer toEntity(CustomerDTO customerDTO);
 

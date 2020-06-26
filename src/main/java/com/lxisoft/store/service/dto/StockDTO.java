@@ -1,19 +1,19 @@
 package com.lxisoft.store.service.dto;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.lxisoft.store.domain.Stock} entity.
  */
 public class StockDTO implements Serializable {
-
+    
     private Long id;
 
     private String description;
 
     private Long noOfItem;
 
-
+    
     public Long getId() {
         return id;
     }
@@ -43,22 +43,19 @@ public class StockDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof StockDTO)) {
             return false;
         }
 
-        StockDTO stockDTO = (StockDTO) o;
-        if (stockDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), stockDTO.getId());
+        return id != null && id.equals(((StockDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "StockDTO{" +

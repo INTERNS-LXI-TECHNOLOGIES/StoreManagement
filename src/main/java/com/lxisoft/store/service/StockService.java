@@ -27,7 +27,7 @@ public interface StockService {
     /**
      * Get all the StockDTO where Product is {@code null}.
      *
-     * @return the list of entities.
+     * @return the {@link List} of entities.
      */
     List<StockDTO> findAllWhereProductIsNull();
 

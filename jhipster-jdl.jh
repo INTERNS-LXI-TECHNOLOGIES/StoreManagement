@@ -38,11 +38,11 @@ relationship OneToMany{
 	Store{customer} to Customer{store},
 	Store{category} to Category{store},
 	Category{product} to Product{category},
+	 Customer{sale} to Sale{customer},
 	Product{sale} to Sale{product}
 }
 
-relationship OneToOne{
-  Sale{customer} to Customer{sale},
+relationship OneToOne{  
   Product{stock} to Stock{product}
 }
 

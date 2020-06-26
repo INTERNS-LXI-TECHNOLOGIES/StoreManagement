@@ -1,5 +1,6 @@
 package com.lxisoft.store.domain;
 
+
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class Store implements Serializable {
     @OneToMany(mappedBy = "store")
     private Set<Category> categories = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -127,7 +128,7 @@ public class Store implements Serializable {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -145,6 +146,7 @@ public class Store implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Store{" +

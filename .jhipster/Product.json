@@ -1,73 +1,74 @@
 {
-    "name": "Product",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "quantity",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "price",
-            "fieldType": "Double"
-        },
-        {
-            "fieldName": "manufacturingDate",
-            "fieldType": "Instant"
-        },
-        {
-            "fieldName": "expiringDate",
-            "fieldType": "Instant"
-        },
-        {
-            "fieldName": "warrenty",
-            "fieldType": "String"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "stock",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "stock",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "sale",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "sale"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "store",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "store",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "category",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "category",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200618083131",
-    "entityTableName": "product",
-    "dto": "mapstruct",
-    "pagination": "no",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "clientRootFolder": "",
-    "applications": "*"
+  "name": "Product",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "quantity",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "manufacturingDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "expiringDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "warrenty",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "stock",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "stock",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "sale",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "sale"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "store",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "store",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "category",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200618083131",
+  "entityTableName": "product",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "embedded": false
 }

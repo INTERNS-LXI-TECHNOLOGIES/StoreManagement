@@ -66,7 +66,7 @@ public class StockServiceImpl implements StockService {
 
 
     /**
-    *  Get all the stocks where Product is {@code null}.
+     *  Get all the stocks where Product is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 

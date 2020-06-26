@@ -1,10 +1,12 @@
 package com.lxisoft.store.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Customer.
@@ -25,15 +27,14 @@ public class Customer implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "customer")
-    @JsonIgnore
-    private Sale sale;
+    @OneToMany(mappedBy = "customer")
+    private Set<Sale> sales = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("customers")
+    @JsonIgnoreProperties(value = "customers", allowSetters = true)
     private Store store;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -68,17 +69,29 @@ public class Customer implements Serializable {
         this.name = name;
     }
 
-    public Sale getSale() {
-        return sale;
+    public Set<Sale> getSales() {
+        return sales;
     }
 
-    public Customer sale(Sale sale) {
-        this.sale = sale;
+    public Customer sales(Set<Sale> sales) {
+        this.sales = sales;
         return this;
     }
 
-    public void setSale(Sale sale) {
-        this.sale = sale;
+    public Customer addSale(Sale sale) {
+        this.sales.add(sale);
+        sale.setCustomer(this);
+        return this;
+    }
+
+    public Customer removeSale(Sale sale) {
+        this.sales.remove(sale);
+        sale.setCustomer(null);
+        return this;
+    }
+
+    public void setSales(Set<Sale> sales) {
+        this.sales = sales;
     }
 
     public Store getStore() {
@@ -93,7 +106,7 @@ public class Customer implements Serializable {
     public void setStore(Store store) {
         this.store = store;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -111,6 +124,7 @@ public class Customer implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Customer{" +

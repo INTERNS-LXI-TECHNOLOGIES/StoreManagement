@@ -1,13 +1,13 @@
 package com.lxisoft.store.service.dto;
+
 import java.time.Instant;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.lxisoft.store.domain.Sale} entity.
  */
 public class SaleDTO implements Serializable {
-
+    
     private Long id;
 
     private Long noOfProduct;
@@ -20,7 +20,7 @@ public class SaleDTO implements Serializable {
     private Long customerId;
 
     private Long productId;
-
+    
     public Long getId() {
         return id;
     }
@@ -74,22 +74,19 @@ public class SaleDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof SaleDTO)) {
             return false;
         }
 
-        SaleDTO saleDTO = (SaleDTO) o;
-        if (saleDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), saleDTO.getId());
+        return id != null && id.equals(((SaleDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "SaleDTO{" +

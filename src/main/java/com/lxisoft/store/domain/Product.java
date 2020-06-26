@@ -1,4 +1,5 @@
 package com.lxisoft.store.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -50,14 +51,14 @@ public class Product implements Serializable {
     private Set<Sale> sales = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties("products")
+    @JsonIgnoreProperties(value = "products", allowSetters = true)
     private Store store;
 
     @ManyToOne
-    @JsonIgnoreProperties("products")
+    @JsonIgnoreProperties(value = "products", allowSetters = true)
     private Category category;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -220,7 +221,7 @@ public class Product implements Serializable {
     public void setCategory(Category category) {
         this.category = category;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -238,6 +239,7 @@ public class Product implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Product{" +
