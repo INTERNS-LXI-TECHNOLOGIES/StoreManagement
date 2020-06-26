@@ -38,13 +38,12 @@ relationship OneToMany{
 	Store{customer} to Customer{store},
 	Store{category} to Category{store},
 	Category{product} to Product{category},
-	Stock{category} to Category{stock},
-	Stock{product} to Product{stock},
 	Product{sale} to Sale{product}
 }
 
 relationship OneToOne{
-Customer{sale} to Sale{customer}
+  Sale{customer} to Customer{sale},
+  Product{stock} to Stock{product}
 }
 
 service all with serviceImpl

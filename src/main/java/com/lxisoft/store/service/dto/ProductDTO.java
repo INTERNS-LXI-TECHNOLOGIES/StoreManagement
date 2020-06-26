@@ -25,11 +25,11 @@ public class ProductDTO implements Serializable {
     private String warrenty;
 
 
+    private Long stockId;
+
     private Long storeId;
 
     private Long categoryId;
-
-    private Long stockId;
 
     public Long getId() {
         return id;
@@ -95,6 +95,14 @@ public class ProductDTO implements Serializable {
         this.warrenty = warrenty;
     }
 
+    public Long getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(Long stockId) {
+        this.stockId = stockId;
+    }
+
     public Long getStoreId() {
         return storeId;
     }
@@ -109,14 +117,6 @@ public class ProductDTO implements Serializable {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Long getStockId() {
-        return stockId;
-    }
-
-    public void setStockId(Long stockId) {
-        this.stockId = stockId;
     }
 
     @Override
@@ -151,9 +151,9 @@ public class ProductDTO implements Serializable {
             ", manufacturingDate='" + getManufacturingDate() + "'" +
             ", expiringDate='" + getExpiringDate() + "'" +
             ", warrenty='" + getWarrenty() + "'" +
+            ", stockId=" + getStockId() +
             ", storeId=" + getStoreId() +
             ", categoryId=" + getCategoryId() +
-            ", stockId=" + getStockId() +
             "}";
     }
 }

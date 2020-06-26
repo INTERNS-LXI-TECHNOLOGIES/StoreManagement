@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Stock}.
@@ -62,6 +63,21 @@ public class StockServiceImpl implements StockService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
+
+    /**
+    *  Get all the stocks where Product is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<StockDTO> findAllWhereProductIsNull() {
+        log.debug("Request to get all stocks where Product is null");
+        return StreamSupport
+            .stream(stockRepository.findAll().spliterator(), false)
+            .filter(stock -> stock.getProduct() == null)
+            .map(stockMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one stock by id.

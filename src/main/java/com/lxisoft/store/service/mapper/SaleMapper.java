@@ -8,13 +8,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Sale} and its DTO {@link SaleDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ProductMapper.class})
+@Mapper(componentModel = "spring", uses = {CustomerMapper.class, ProductMapper.class})
 public interface SaleMapper extends EntityMapper<SaleDTO, Sale> {
 
+    @Mapping(source = "customer.id", target = "customerId")
     @Mapping(source = "product.id", target = "productId")
     SaleDTO toDto(Sale sale);
 
-    @Mapping(target = "customer", ignore = true)
+    @Mapping(source = "customerId", target = "customer")
     @Mapping(source = "productId", target = "product")
     Sale toEntity(SaleDTO saleDTO);
 

@@ -16,8 +16,6 @@ public class CategoryDTO implements Serializable {
 
     private Long storeId;
 
-    private Long stockId;
-
     public Long getId() {
         return id;
     }
@@ -50,14 +48,6 @@ public class CategoryDTO implements Serializable {
         this.storeId = storeId;
     }
 
-    public Long getStockId() {
-        return stockId;
-    }
-
-    public void setStockId(Long stockId) {
-        this.stockId = stockId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -86,7 +76,6 @@ public class CategoryDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", storeId=" + getStoreId() +
-            ", stockId=" + getStockId() +
             "}";
     }
 }

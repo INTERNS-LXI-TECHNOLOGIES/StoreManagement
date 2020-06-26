@@ -12,10 +12,7 @@ import org.mapstruct.*;
 public interface StockMapper extends EntityMapper<StockDTO, Stock> {
 
 
-    @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "removeCategory", ignore = true)
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "removeProduct", ignore = true)
+    @Mapping(target = "product", ignore = true)
     Stock toEntity(StockDTO stockDTO);
 
     default Stock fromId(Long id) {

@@ -32,6 +32,14 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "stock",
+            "otherEntityRelationshipName": "product",
+            "relationshipName": "stock",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
             "relationshipType": "one-to-many",
             "otherEntityName": "sale",
             "otherEntityRelationshipName": "product",
@@ -49,13 +57,6 @@
             "otherEntityName": "category",
             "otherEntityRelationshipName": "product",
             "relationshipName": "category",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "stock",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "stock",
             "otherEntityField": "id"
         }
     ],

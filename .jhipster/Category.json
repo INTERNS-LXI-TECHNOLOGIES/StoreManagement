@@ -23,13 +23,6 @@
             "otherEntityRelationshipName": "category",
             "relationshipName": "store",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "stock",
-            "otherEntityRelationshipName": "category",
-            "relationshipName": "stock",
-            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20200625055224",

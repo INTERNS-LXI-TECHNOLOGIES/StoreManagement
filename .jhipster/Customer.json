@@ -16,8 +16,7 @@
             "otherEntityName": "sale",
             "otherEntityRelationshipName": "customer",
             "relationshipName": "sale",
-            "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": false
         },
         {
             "relationshipType": "many-to-one",

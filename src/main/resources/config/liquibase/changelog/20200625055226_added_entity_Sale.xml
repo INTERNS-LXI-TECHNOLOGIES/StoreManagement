@@ -25,6 +25,9 @@
             <column name="amount" type="double">
                 <constraints nullable="true" />
             </column>
+            <column name="customer_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_sale_customer_id" />
+            </column>
             <column name="product_id" type="bigint">
                 <constraints nullable="true" />
             </column>

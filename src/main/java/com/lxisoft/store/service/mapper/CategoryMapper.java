@@ -8,17 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Category} and its DTO {@link CategoryDTO}.
  */
-@Mapper(componentModel = "spring", uses = {StoreMapper.class, StockMapper.class})
+@Mapper(componentModel = "spring", uses = {StoreMapper.class})
 public interface CategoryMapper extends EntityMapper<CategoryDTO, Category> {
 
     @Mapping(source = "store.id", target = "storeId")
-    @Mapping(source = "stock.id", target = "stockId")
     CategoryDTO toDto(Category category);
 
     @Mapping(target = "products", ignore = true)
     @Mapping(target = "removeProduct", ignore = true)
     @Mapping(source = "storeId", target = "store")
-    @Mapping(source = "stockId", target = "stock")
     Category toEntity(CategoryDTO categoryDTO);
 
     default Category fromId(Long id) {

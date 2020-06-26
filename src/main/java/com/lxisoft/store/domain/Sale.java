@@ -1,5 +1,4 @@
 package com.lxisoft.store.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -29,8 +28,8 @@ public class Sale implements Serializable {
     @Column(name = "amount")
     private Double amount;
 
-    @OneToOne(mappedBy = "sale")
-    @JsonIgnore
+    @OneToOne
+    @JoinColumn(unique = true)
     private Customer customer;
 
     @ManyToOne

@@ -33,10 +33,6 @@ public class Category implements Serializable {
     @JsonIgnoreProperties("categories")
     private Store store;
 
-    @ManyToOne
-    @JsonIgnoreProperties("categories")
-    private Stock stock;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -108,19 +104,6 @@ public class Category implements Serializable {
 
     public void setStore(Store store) {
         this.store = store;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public Category stock(Stock stock) {
-        this.stock = stock;
-        return this;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

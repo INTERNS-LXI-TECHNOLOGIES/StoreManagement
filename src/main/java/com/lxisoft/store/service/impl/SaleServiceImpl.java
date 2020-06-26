@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link Sale}.
@@ -63,21 +62,6 @@ public class SaleServiceImpl implements SaleService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
-
-    /**
-    *  Get all the sales where Customer is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<SaleDTO> findAllWhereCustomerIsNull() {
-        log.debug("Request to get all sales where Customer is null");
-        return StreamSupport
-            .stream(saleRepository.findAll().spliterator(), false)
-            .filter(sale -> sale.getCustomer() == null)
-            .map(saleMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
 
     /**
      * Get one sale by id.

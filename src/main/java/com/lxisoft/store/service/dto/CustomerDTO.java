@@ -14,8 +14,6 @@ public class CustomerDTO implements Serializable {
     private String name;
 
 
-    private Long saleId;
-
     private Long storeId;
 
     public Long getId() {
@@ -40,14 +38,6 @@ public class CustomerDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getSaleId() {
-        return saleId;
-    }
-
-    public void setSaleId(Long saleId) {
-        this.saleId = saleId;
     }
 
     public Long getStoreId() {
@@ -85,7 +75,6 @@ public class CustomerDTO implements Serializable {
             "id=" + getId() +
             ", idpCode='" + getIdpCode() + "'" +
             ", name='" + getName() + "'" +
-            ", saleId=" + getSaleId() +
             ", storeId=" + getStoreId() +
             "}";
     }

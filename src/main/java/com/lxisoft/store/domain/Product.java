@@ -42,6 +42,10 @@ public class Product implements Serializable {
     @Column(name = "warrenty")
     private String warrenty;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Stock stock;
+
     @OneToMany(mappedBy = "product")
     private Set<Sale> sales = new HashSet<>();
 
@@ -52,10 +56,6 @@ public class Product implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("products")
     private Category category;
-
-    @ManyToOne
-    @JsonIgnoreProperties("products")
-    private Stock stock;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -157,6 +157,19 @@ public class Product implements Serializable {
         this.warrenty = warrenty;
     }
 
+    public Stock getStock() {
+        return stock;
+    }
+
+    public Product stock(Stock stock) {
+        this.stock = stock;
+        return this;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
+
     public Set<Sale> getSales() {
         return sales;
     }
@@ -206,19 +219,6 @@ public class Product implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public Product stock(Stock stock) {
-        this.stock = stock;
-        return this;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

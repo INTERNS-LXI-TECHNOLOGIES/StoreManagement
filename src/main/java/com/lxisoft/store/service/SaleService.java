@@ -24,12 +24,6 @@ public interface SaleService {
      * @return the list of entities.
      */
     List<SaleDTO> findAll();
-    /**
-     * Get all the SaleDTO where Customer is {@code null}.
-     *
-     * @return the list of entities.
-     */
-    List<SaleDTO> findAllWhereCustomerIsNull();
 
 
     /**

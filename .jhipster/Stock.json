@@ -12,16 +12,11 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "category",
-            "otherEntityRelationshipName": "stock",
-            "relationshipName": "category"
-        },
-        {
-            "relationshipType": "one-to-many",
+            "relationshipType": "one-to-one",
             "otherEntityName": "product",
             "otherEntityRelationshipName": "stock",
-            "relationshipName": "product"
+            "relationshipName": "product",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20200625055225",

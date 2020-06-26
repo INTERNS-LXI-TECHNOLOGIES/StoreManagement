@@ -37,13 +37,13 @@
             <column name="warrenty" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="stock_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_product_stock_id" />
+            </column>
             <column name="store_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="category_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="stock_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

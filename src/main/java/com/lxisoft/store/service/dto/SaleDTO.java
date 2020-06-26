@@ -17,6 +17,8 @@ public class SaleDTO implements Serializable {
     private Double amount;
 
 
+    private Long customerId;
+
     private Long productId;
 
     public Long getId() {
@@ -49,6 +51,14 @@ public class SaleDTO implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getProductId() {
@@ -87,6 +97,7 @@ public class SaleDTO implements Serializable {
             ", noOfProduct=" + getNoOfProduct() +
             ", date='" + getDate() + "'" +
             ", amount=" + getAmount() +
+            ", customerId=" + getCustomerId() +
             ", productId=" + getProductId() +
             "}";
     }
