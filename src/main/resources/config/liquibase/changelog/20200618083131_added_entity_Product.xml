@@ -28,17 +28,17 @@
             <column name="price" type="double">
                 <constraints nullable="true" />
             </column>
+            <column name="no_of_stock" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="manufacturing_date" type="datetime">
                 <constraints nullable="true" />
             </column>
             <column name="expiring_date" type="datetime">
                 <constraints nullable="true" />
             </column>
-            <column name="warrenty" type="varchar(255)">
+            <column name="warranty" type="varchar(255)">
                 <constraints nullable="true" />
-            </column>
-            <column name="stock_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_product_stock_id" />
             </column>
             <column name="store_id" type="bigint">
                 <constraints nullable="true" />
@@ -75,9 +75,10 @@
             <column name="description" type="string"/>
             <column name="quantity" type="string"/>
             <column name="price" type="numeric"/>
+            <column name="no_of_stock" type="numeric"/>
             <column name="manufacturing_date" type="datetime"/>
             <column name="expiring_date" type="datetime"/>
-            <column name="warrenty" type="string"/>
+            <column name="warranty" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

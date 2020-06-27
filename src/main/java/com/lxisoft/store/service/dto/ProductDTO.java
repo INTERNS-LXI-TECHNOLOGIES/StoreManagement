@@ -18,14 +18,14 @@ public class ProductDTO implements Serializable {
 
     private Double price;
 
+    private Long noOfStock;
+
     private Instant manufacturingDate;
 
     private Instant expiringDate;
 
-    private String warrenty;
+    private String warranty;
 
-
-    private Long stockId;
 
     private Long storeId;
 
@@ -71,6 +71,14 @@ public class ProductDTO implements Serializable {
         this.price = price;
     }
 
+    public Long getNoOfStock() {
+        return noOfStock;
+    }
+
+    public void setNoOfStock(Long noOfStock) {
+        this.noOfStock = noOfStock;
+    }
+
     public Instant getManufacturingDate() {
         return manufacturingDate;
     }
@@ -87,20 +95,12 @@ public class ProductDTO implements Serializable {
         this.expiringDate = expiringDate;
     }
 
-    public String getWarrenty() {
-        return warrenty;
+    public String getWarranty() {
+        return warranty;
     }
 
-    public void setWarrenty(String warrenty) {
-        this.warrenty = warrenty;
-    }
-
-    public Long getStockId() {
-        return stockId;
-    }
-
-    public void setStockId(Long stockId) {
-        this.stockId = stockId;
+    public void setWarranty(String warranty) {
+        this.warranty = warranty;
     }
 
     public Long getStoreId() {
@@ -145,10 +145,10 @@ public class ProductDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
+            ", noOfStock=" + getNoOfStock() +
             ", manufacturingDate='" + getManufacturingDate() + "'" +
             ", expiringDate='" + getExpiringDate() + "'" +
-            ", warrenty='" + getWarrenty() + "'" +
-            ", stockId=" + getStockId() +
+            ", warranty='" + getWarranty() + "'" +
             ", storeId=" + getStoreId() +
             ", categoryId=" + getCategoryId() +
             "}";

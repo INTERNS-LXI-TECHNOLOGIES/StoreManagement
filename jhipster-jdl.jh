@@ -7,21 +7,17 @@ entity Product {
 	description String,
 	quantity String,
 	price Double,
+	noOfStock Long,
 	manufacturingDate Instant,
 	expiringDate Instant,
-	warrenty String
+	warranty String
 	} 
 	
 entity Category	{
     name String,
 	description String,
 	}
-
-entity Stock{
-	description String,
-	noOfItem Long
-	}
-	
+ 
 entity Sale{
     noOfProduct Long,
 	date Instant,
@@ -38,13 +34,10 @@ relationship OneToMany{
 	Store{customer} to Customer{store},
 	Store{category} to Category{store},
 	Category{product} to Product{category},
-	 Customer{sale} to Sale{customer},
+	Customer{sale} to Sale{customer},
 	Product{sale} to Sale{product}
 }
-
-relationship OneToOne{  
-  Product{stock} to Stock{product}
-}
+ 
 
 service all with serviceImpl
 

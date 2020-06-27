@@ -34,18 +34,17 @@ public class Product implements Serializable {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "no_of_stock")
+    private Long noOfStock;
+
     @Column(name = "manufacturing_date")
     private Instant manufacturingDate;
 
     @Column(name = "expiring_date")
     private Instant expiringDate;
 
-    @Column(name = "warrenty")
-    private String warrenty;
-
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Stock stock;
+    @Column(name = "warranty")
+    private String warranty;
 
     @OneToMany(mappedBy = "product")
     private Set<Sale> sales = new HashSet<>();
@@ -119,6 +118,19 @@ public class Product implements Serializable {
         this.price = price;
     }
 
+    public Long getNoOfStock() {
+        return noOfStock;
+    }
+
+    public Product noOfStock(Long noOfStock) {
+        this.noOfStock = noOfStock;
+        return this;
+    }
+
+    public void setNoOfStock(Long noOfStock) {
+        this.noOfStock = noOfStock;
+    }
+
     public Instant getManufacturingDate() {
         return manufacturingDate;
     }
@@ -145,30 +157,17 @@ public class Product implements Serializable {
         this.expiringDate = expiringDate;
     }
 
-    public String getWarrenty() {
-        return warrenty;
+    public String getWarranty() {
+        return warranty;
     }
 
-    public Product warrenty(String warrenty) {
-        this.warrenty = warrenty;
+    public Product warranty(String warranty) {
+        this.warranty = warranty;
         return this;
     }
 
-    public void setWarrenty(String warrenty) {
-        this.warrenty = warrenty;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public Product stock(Stock stock) {
-        this.stock = stock;
-        return this;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setWarranty(String warranty) {
+        this.warranty = warranty;
     }
 
     public Set<Sale> getSales() {
@@ -248,9 +247,10 @@ public class Product implements Serializable {
             ", description='" + getDescription() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
+            ", noOfStock=" + getNoOfStock() +
             ", manufacturingDate='" + getManufacturingDate() + "'" +
             ", expiringDate='" + getExpiringDate() + "'" +
-            ", warrenty='" + getWarrenty() + "'" +
+            ", warranty='" + getWarranty() + "'" +
             "}";
     }
 }

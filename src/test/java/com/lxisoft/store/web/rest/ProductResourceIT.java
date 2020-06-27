@@ -46,14 +46,17 @@ public class ProductResourceIT {
     private static final Double DEFAULT_PRICE = 1D;
     private static final Double UPDATED_PRICE = 2D;
 
+    private static final Long DEFAULT_NO_OF_STOCK = 1L;
+    private static final Long UPDATED_NO_OF_STOCK = 2L;
+
     private static final Instant DEFAULT_MANUFACTURING_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_MANUFACTURING_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final Instant DEFAULT_EXPIRING_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_EXPIRING_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_WARRENTY = "AAAAAAAAAA";
-    private static final String UPDATED_WARRENTY = "BBBBBBBBBB";
+    private static final String DEFAULT_WARRANTY = "AAAAAAAAAA";
+    private static final String UPDATED_WARRANTY = "BBBBBBBBBB";
 
     @Autowired
     private ProductRepository productRepository;
@@ -84,9 +87,10 @@ public class ProductResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .quantity(DEFAULT_QUANTITY)
             .price(DEFAULT_PRICE)
+            .noOfStock(DEFAULT_NO_OF_STOCK)
             .manufacturingDate(DEFAULT_MANUFACTURING_DATE)
             .expiringDate(DEFAULT_EXPIRING_DATE)
-            .warrenty(DEFAULT_WARRENTY);
+            .warranty(DEFAULT_WARRANTY);
         return product;
     }
     /**
@@ -101,9 +105,10 @@ public class ProductResourceIT {
             .description(UPDATED_DESCRIPTION)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
+            .noOfStock(UPDATED_NO_OF_STOCK)
             .manufacturingDate(UPDATED_MANUFACTURING_DATE)
             .expiringDate(UPDATED_EXPIRING_DATE)
-            .warrenty(UPDATED_WARRENTY);
+            .warranty(UPDATED_WARRANTY);
         return product;
     }
 
@@ -131,9 +136,10 @@ public class ProductResourceIT {
         assertThat(testProduct.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProduct.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testProduct.getNoOfStock()).isEqualTo(DEFAULT_NO_OF_STOCK);
         assertThat(testProduct.getManufacturingDate()).isEqualTo(DEFAULT_MANUFACTURING_DATE);
         assertThat(testProduct.getExpiringDate()).isEqualTo(DEFAULT_EXPIRING_DATE);
-        assertThat(testProduct.getWarrenty()).isEqualTo(DEFAULT_WARRENTY);
+        assertThat(testProduct.getWarranty()).isEqualTo(DEFAULT_WARRANTY);
     }
 
     @Test
@@ -172,9 +178,10 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].noOfStock").value(hasItem(DEFAULT_NO_OF_STOCK.intValue())))
             .andExpect(jsonPath("$.[*].manufacturingDate").value(hasItem(DEFAULT_MANUFACTURING_DATE.toString())))
             .andExpect(jsonPath("$.[*].expiringDate").value(hasItem(DEFAULT_EXPIRING_DATE.toString())))
-            .andExpect(jsonPath("$.[*].warrenty").value(hasItem(DEFAULT_WARRENTY)));
+            .andExpect(jsonPath("$.[*].warranty").value(hasItem(DEFAULT_WARRANTY)));
     }
     
     @Test
@@ -192,9 +199,10 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
+            .andExpect(jsonPath("$.noOfStock").value(DEFAULT_NO_OF_STOCK.intValue()))
             .andExpect(jsonPath("$.manufacturingDate").value(DEFAULT_MANUFACTURING_DATE.toString()))
             .andExpect(jsonPath("$.expiringDate").value(DEFAULT_EXPIRING_DATE.toString()))
-            .andExpect(jsonPath("$.warrenty").value(DEFAULT_WARRENTY));
+            .andExpect(jsonPath("$.warranty").value(DEFAULT_WARRANTY));
     }
     @Test
     @Transactional
@@ -221,9 +229,10 @@ public class ProductResourceIT {
             .description(UPDATED_DESCRIPTION)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
+            .noOfStock(UPDATED_NO_OF_STOCK)
             .manufacturingDate(UPDATED_MANUFACTURING_DATE)
             .expiringDate(UPDATED_EXPIRING_DATE)
-            .warrenty(UPDATED_WARRENTY);
+            .warranty(UPDATED_WARRANTY);
         ProductDTO productDTO = productMapper.toDto(updatedProduct);
 
         restProductMockMvc.perform(put("/api/products")
@@ -239,9 +248,10 @@ public class ProductResourceIT {
         assertThat(testProduct.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProduct.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testProduct.getNoOfStock()).isEqualTo(UPDATED_NO_OF_STOCK);
         assertThat(testProduct.getManufacturingDate()).isEqualTo(UPDATED_MANUFACTURING_DATE);
         assertThat(testProduct.getExpiringDate()).isEqualTo(UPDATED_EXPIRING_DATE);
-        assertThat(testProduct.getWarrenty()).isEqualTo(UPDATED_WARRENTY);
+        assertThat(testProduct.getWarranty()).isEqualTo(UPDATED_WARRANTY);
     }
 
     @Test
