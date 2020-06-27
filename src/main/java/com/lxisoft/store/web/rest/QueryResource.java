@@ -6,6 +6,8 @@ package com.lxisoft.store.web.rest;
 import com.lxisoft.store.service.ProductService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,12 @@ public class QueryResource {
 	public long findStockByProductId(@PathVariable Long productId) {
 		log.debug("<<<<< findStockByProductId >>>>>>");
 		return productService.findOne(productId).get().getNoOfStock();
+	}
+	
+	@GetMapping("/findAllProductsByBrand/{brand}")
+	public Optional<List<ProductDTO>> findAllProductsByBrand(@PathVariable String brand) {
+	 
+		return productService.findAllProductsByBrand(brand);
 	}
 
 }
