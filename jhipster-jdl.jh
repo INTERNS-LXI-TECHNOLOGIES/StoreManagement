@@ -5,6 +5,7 @@ entity Store{
 entity Product {
 	name String,
 	description String,
+    brand String,
 	quantity String,
 	price Double,
 	noOfStock Long,

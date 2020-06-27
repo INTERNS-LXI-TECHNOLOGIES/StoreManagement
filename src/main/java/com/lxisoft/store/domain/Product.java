@@ -28,6 +28,9 @@ public class Product implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "brand")
+    private String brand;
+
     @Column(name = "quantity")
     private String quantity;
 
@@ -90,6 +93,19 @@ public class Product implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public Product brand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getQuantity() {
@@ -245,6 +261,7 @@ public class Product implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", brand='" + getBrand() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
             ", noOfStock=" + getNoOfStock() +

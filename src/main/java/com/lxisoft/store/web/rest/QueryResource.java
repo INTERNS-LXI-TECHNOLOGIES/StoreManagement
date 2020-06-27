@@ -33,7 +33,7 @@ public class QueryResource {
 	 * getting all product ,check against given category id
 	 */
 	@GetMapping("/findAllProductsByCategoryId/{categoryId}")
-	public List<ProductDTO> findAllProductsByCategoryId(@PathVariable long categoryId) {
+	public List<ProductDTO> findAllProductsByCategoryId(@PathVariable Long categoryId) {
 	 
 		log.debug("<<<<< findAllProductsByCategoryId >>>>>>" );
 		List<ProductDTO> resultantproduct = new ArrayList<ProductDTO>();
@@ -51,12 +51,12 @@ public class QueryResource {
 	 *
 	 */
 	@GetMapping("/findStockByCategoryId/{categoryId}")
-	public long findStockByCategoryId(@PathVariable long categoryId) {
+	public long findStockByCategoryId(@PathVariable Long categoryId) {
 		List<ProductDTO> productList = productService.findAll();
 		long totalStock = 0;
 		for (ProductDTO product : productList) {
 			if (product.getCategoryId() == categoryId) {
-				totalStock = totalStock + product.getNoOfStock();
+				totalStock = totalStock + product.getNoOfStock();  
 			}
 		}
 		return totalStock;
@@ -67,7 +67,7 @@ public class QueryResource {
 	 *
 	 */
 	@GetMapping("/findStockByProductId/{productId}")
-	public long findStockByProductId(@PathVariable long productId) {
+	public long findStockByProductId(@PathVariable Long productId) {
 		log.debug("<<<<< findStockByProductId >>>>>>");
 		return productService.findOne(productId).get().getNoOfStock();
 	}

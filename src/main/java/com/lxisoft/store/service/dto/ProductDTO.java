@@ -14,6 +14,8 @@ public class ProductDTO implements Serializable {
 
     private String description;
 
+    private String brand;
+
     private String quantity;
 
     private Double price;
@@ -53,6 +55,14 @@ public class ProductDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getQuantity() {
@@ -143,6 +153,7 @@ public class ProductDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", brand='" + getBrand() + "'" +
             ", quantity='" + getQuantity() + "'" +
             ", price=" + getPrice() +
             ", noOfStock=" + getNoOfStock() +

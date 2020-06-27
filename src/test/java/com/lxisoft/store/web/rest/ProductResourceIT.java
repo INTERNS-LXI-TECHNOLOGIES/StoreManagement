@@ -40,6 +40,9 @@ public class ProductResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_BRAND = "AAAAAAAAAA";
+    private static final String UPDATED_BRAND = "BBBBBBBBBB";
+
     private static final String DEFAULT_QUANTITY = "AAAAAAAAAA";
     private static final String UPDATED_QUANTITY = "BBBBBBBBBB";
 
@@ -85,6 +88,7 @@ public class ProductResourceIT {
         Product product = new Product()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .brand(DEFAULT_BRAND)
             .quantity(DEFAULT_QUANTITY)
             .price(DEFAULT_PRICE)
             .noOfStock(DEFAULT_NO_OF_STOCK)
@@ -103,6 +107,7 @@ public class ProductResourceIT {
         Product product = new Product()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .brand(UPDATED_BRAND)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
             .noOfStock(UPDATED_NO_OF_STOCK)
@@ -134,6 +139,7 @@ public class ProductResourceIT {
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProduct.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testProduct.getBrand()).isEqualTo(DEFAULT_BRAND);
         assertThat(testProduct.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testProduct.getNoOfStock()).isEqualTo(DEFAULT_NO_OF_STOCK);
@@ -176,6 +182,7 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].brand").value(hasItem(DEFAULT_BRAND)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].noOfStock").value(hasItem(DEFAULT_NO_OF_STOCK.intValue())))
@@ -197,6 +204,7 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.id").value(product.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.brand").value(DEFAULT_BRAND))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.noOfStock").value(DEFAULT_NO_OF_STOCK.intValue()))
@@ -227,6 +235,7 @@ public class ProductResourceIT {
         updatedProduct
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .brand(UPDATED_BRAND)
             .quantity(UPDATED_QUANTITY)
             .price(UPDATED_PRICE)
             .noOfStock(UPDATED_NO_OF_STOCK)
@@ -246,6 +255,7 @@ public class ProductResourceIT {
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProduct.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testProduct.getBrand()).isEqualTo(UPDATED_BRAND);
         assertThat(testProduct.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testProduct.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testProduct.getNoOfStock()).isEqualTo(UPDATED_NO_OF_STOCK);
