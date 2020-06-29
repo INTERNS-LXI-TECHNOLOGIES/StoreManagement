@@ -6,6 +6,8 @@ package com.lxisoft.store.web.rest;
 import com.lxisoft.store.service.ProductService;
  
 import com.lxisoft.store.service.SaleService;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,13 +41,29 @@ public class CommandResource {
 	 * Add the list of products on sale  and decrease the stock of product
 	 *
 	 */
-	@PostMapping("/addSales")
+	/*@PostMapping("/addSales")
 	public void addSale(@RequestBody List<SaleDTO> saleDTO) {
 		for (SaleDTO s : saleDTO) {
 			s = saleService.save(s);
 			Optional<ProductDTO> p = productService.findOne(s.getId());
 			p.get().setNoOfStock(p.get().getNoOfStock() - s.getNoOfProduct());
 			productService.save(p.get());
+		}
+	}*/
+	@PostMapping("/addsales/{customerId}")
+	public void addSale(@PathVariable Long customerId,@RequestBody List<ProductDTO> productDTO ) {
+		for (ProductDTO product : productDTO) {
+			SaleDTO sale= new SaleDTO();
+			Instant instant = Instant.now();
+			sale.setAmount(product.getPrice());//amount must mulplied with quatity that to be done later.
+			//sale.setCustomerId(Long.parseLong(customerId));
+			sale.setCustomerId(customerId);
+			sale.setDate(instant);
+			sale.setNoOfProduct(product.getNoOfStock());
+			sale.setProductId(product.getId());	
+			sale = saleService.save(sale);	 
+			product.setNoOfStock(product.getNoOfStock() - sale.getNoOfProduct());
+			productService.save(product);
 		}
 	}
 
