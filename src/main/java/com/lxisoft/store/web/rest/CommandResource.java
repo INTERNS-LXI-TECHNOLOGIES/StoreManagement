@@ -45,7 +45,7 @@ public class CommandResource {
 	public void addSale(@RequestBody List<SaleDTO> saleDTO) {
 		for (SaleDTO s : saleDTO) {
 			s = saleService.save(s);
-			Optional<ProductDTO> p = productService.findOne(s.getId());
+			Optional<ProductDTO> p = productService.findOne(s.getProductId());
 			p.get().setNoOfStock(p.get().getNoOfStock() - s.getNoOfProduct());
 			productService.save(p.get());
 		}
