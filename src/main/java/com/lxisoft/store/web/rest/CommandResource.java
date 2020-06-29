@@ -4,8 +4,10 @@
 package com.lxisoft.store.web.rest;
 
 import com.lxisoft.store.service.ProductService;
- 
+
 import com.lxisoft.store.service.SaleService;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lxisoft.store.service.dto.ProductDTO;
 import com.lxisoft.store.service.dto.SaleDTO;
+import java.time.Instant;
 
 /**
  *  
@@ -36,16 +39,32 @@ public class CommandResource {
 	private SaleService saleService;
 
 	/**
-	 * Add the list of products on sale  and decrease the stock of product
+	 * Add the list of products on sale and decrease the stock of product
 	 *
 	 */
-	@PostMapping("/addSales")
-	public void addSale(@RequestBody List<SaleDTO> saleDTO) {
-		for (SaleDTO s : saleDTO) {
-			s = saleService.save(s);
-			Optional<ProductDTO> p = productService.findOne(s.getProductId());
-			p.get().setNoOfStock(p.get().getNoOfStock() - s.getNoOfProduct());
-			productService.save(p.get());
+	@PostMapping("/addsales/{customerId}")
+	public void addSale(@PathVariable Long customerId, @RequestBody List<ProductDTO> productDTO) {
+		for (ProductDTO product : productDTO) {
+			SaleDTO sale = new SaleDTO();
+			Instant instant = Instant.now();
+			sale.setAmount(product.getPrice());// amount must mulplied with quatity that to be done later.
+			sale.setCustomerId(customerId);
+			sale.setDate(instant); 
+			sale.setNoOfProduct(product.getNoOfStock());
+			sale.setProductId(product.getId());
+			sale = saleService.save(sale);
+			
+			long productId=-1;
+			List<ProductDTO> productList = productService.findAll();
+			for (ProductDTO p : productList) {
+				if (p.getName().equals(product.getName())) {
+					productId=p.getId();
+				}
+			}
+			Optional<ProductDTO> pd= productService.findOne(productId);
+			 
+			pd.get().setNoOfStock(pd.get().getNoOfStock() - sale.getNoOfProduct());
+			productService.save(pd.get());
 		}
 	}
 
