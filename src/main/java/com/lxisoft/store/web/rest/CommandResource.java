@@ -6,8 +6,9 @@ package com.lxisoft.store.web.rest;
 import com.lxisoft.store.service.ProductService;
 
 import com.lxisoft.store.service.SaleService;
-
-import java.util.Date;
+ 
+import java.time.Instant;
+ 
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,7 @@ public class CommandResource {
 	 * Add the list of products on sale and decrease the stock of product
 	 *
 	 */
+ 
 	@PostMapping("/addsales/{customerId}")
 	public void addSale(@PathVariable Long customerId, @RequestBody List<ProductDTO> productDTO) {
 		for (ProductDTO product : productDTO) {
@@ -65,6 +67,7 @@ public class CommandResource {
 			 
 			pd.get().setNoOfStock(pd.get().getNoOfStock() - sale.getNoOfProduct());
 			productService.save(pd.get());
+  
 		}
 	}
 
