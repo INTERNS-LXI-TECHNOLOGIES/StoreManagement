@@ -53,9 +53,7 @@ public class CommandResource {
 			sale.setCustomerId(customerId);
 			sale.setDate(instant); 
 			sale.setNoOfProduct(product.getNoOfStock());
-			sale.setProductId(product.getId());
-			sale = saleService.save(sale);
-			
+			sale.setProductId(product.getId());				
 			long productId=-1;
 			List<ProductDTO> productList = productService.findAll();
 			for (ProductDTO p : productList) {
@@ -63,11 +61,11 @@ public class CommandResource {
 					productId=p.getId();
 				}
 			}
-			Optional<ProductDTO> pd= productService.findOne(productId);
-			 
+			Optional<ProductDTO> pd= productService.findOne(productId);			 
 			pd.get().setNoOfStock(pd.get().getNoOfStock() - sale.getNoOfProduct());
 			productService.save(pd.get());
-  
+			sale.setProductId(productId);	
+			sale = saleService.save(sale);	
 		}
 	}
 
