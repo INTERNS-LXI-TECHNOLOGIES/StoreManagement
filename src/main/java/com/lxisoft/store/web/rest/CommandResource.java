@@ -52,8 +52,7 @@ public class CommandResource {
 			sale.setAmount(product.getPrice());// amount must mulplied with quatity that to be done later.
 			sale.setCustomerId(customerId);
 			sale.setDate(instant); 
-			sale.setNoOfProduct(product.getNoOfStock());
-			sale.setProductId(product.getId());				
+			sale.setNoOfProduct(product.getNoOfStock());				
 			long productId=-1;
 			List<ProductDTO> productList = productService.findAll();
 			for (ProductDTO p : productList) {
