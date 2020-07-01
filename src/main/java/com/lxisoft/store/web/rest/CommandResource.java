@@ -43,7 +43,10 @@ public class CommandResource {
 	private SaleService saleService;
 	@Autowired
 	private CartService cartService;
-	
+	/**
+	 * Add the list of product to cart
+	 *
+	 */
 	@PostMapping("/addcart/{customerId}/{noOfProduct}")
 	public void addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
 	CartDTO cart =new CartDTO();
@@ -55,7 +58,7 @@ public class CommandResource {
 	cartService.save(cart);
 	}
 	/**
-	 * Add the list of products on sale and decrease the stock of product
+	 * Add the list of cart to sale
 	 *
 	 */
  
