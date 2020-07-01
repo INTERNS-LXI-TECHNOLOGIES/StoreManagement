@@ -74,10 +74,6 @@ public class QueryResource {
 		return productService.findOne(productId).get().getNoOfStock();
 	}
 	
-	@GetMapping("/findAllProductsByBrand/{brand}")
-	public Optional<List<ProductDTO>> findAllProductsByBrand(@PathVariable String brand) {
 	 
-		return productService.findAllProductsByBrand(brand);
-	}
 
 }

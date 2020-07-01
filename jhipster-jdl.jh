@@ -29,6 +29,11 @@ entity Customer{
 	idpCode String,
 	name String
 }
+entity Cart{
+   noOfProduct Long,
+   productName String,
+   amount Double
+}
 
 relationship OneToMany{
 	Store{product} to Product{store},
@@ -36,7 +41,9 @@ relationship OneToMany{
 	Store{category} to Category{store},
 	Category{product} to Product{category},
 	Customer{sale} to Sale{customer},
-	Product{sale} to Sale{product}
+	Customer{cart} to Cart{customer},	 
+    Product{cart} to Cart{product},
+    Product{sale} to Sale{product}
 }
  
 

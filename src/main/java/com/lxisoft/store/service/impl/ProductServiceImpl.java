@@ -87,9 +87,4 @@ public class ProductServiceImpl implements ProductService {
         log.debug("Request to delete Product : {}", id);
         productRepository.deleteById(id);
     }
-    
-    public Optional<List<ProductDTO>> findAllProductsByBrand(String brand){
-    	return productRepository.findAllByBrand(brand)
-                .map(productMapper::toDto);
-    }
 }

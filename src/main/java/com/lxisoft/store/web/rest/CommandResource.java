@@ -3,6 +3,7 @@
  */
 package com.lxisoft.store.web.rest;
 
+import com.lxisoft.store.service.CartService;
 import com.lxisoft.store.service.ProductService;
 
 import com.lxisoft.store.service.SaleService;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
 import com.lxisoft.store.service.dto.SaleDTO;
 import java.time.Instant;
@@ -38,34 +41,39 @@ public class CommandResource {
 
 	@Autowired
 	private SaleService saleService;
-
+	@Autowired
+	private CartService cartService;
+	
+	@PostMapping("/addcart/{customerId}/{noOfProduct}")
+	public void addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
+	CartDTO cart =new CartDTO();
+	cart.setCustomerId(customerId);
+	cart.setNoOfProduct(noOfProduct);
+	cart.setAmount((productDTO.getPrice()*noOfProduct));
+	cart.setProductId(productDTO.getId());
+	cart.setProductName(productDTO.getName());
+	cartService.save(cart);
+	}
 	/**
 	 * Add the list of products on sale and decrease the stock of product
 	 *
 	 */
  
-	@PostMapping("/addsales/{customerId}")
-	public void addSale(@PathVariable Long customerId, @RequestBody List<ProductDTO> productDTO) {
-		for (ProductDTO product : productDTO) {
+	@PostMapping("/addsale/{customerId}")
+	public void addSale(@PathVariable Long customerId, @RequestBody List<CartDTO> cartDTO) {
+		for (CartDTO cart : cartDTO) {
 			SaleDTO sale = new SaleDTO();
 			Instant instant = Instant.now();
-			sale.setAmount(product.getPrice());// amount must mulplied with quatity that to be done later.
+			sale.setAmount(cart.getAmount()); 
 			sale.setCustomerId(customerId);
-			sale.setDate(instant); 
-			sale.setNoOfProduct(product.getNoOfStock());
-			sale.setProductId(product.getId());				
-			long productId=-1;
-			List<ProductDTO> productList = productService.findAll();
-			for (ProductDTO p : productList) {
-				if (p.getName().equals(product.getName())) {
-					productId=p.getId();
-				}
-			}
-			Optional<ProductDTO> pd= productService.findOne(productId);			 
-			pd.get().setNoOfStock(pd.get().getNoOfStock() - sale.getNoOfProduct());
-			productService.save(pd.get());
-			sale.setProductId(productId);	
-			sale = saleService.save(sale);	
+			sale.setDate(instant);
+			sale.setNoOfProduct(cart.getNoOfProduct());
+			sale.setProductId(cart.getProductId());
+			Optional<ProductDTO> product= productService.findOne(cart.getProductId());			 
+			product.get().setNoOfStock(product.get().getNoOfStock() - sale.getNoOfProduct());
+			productService.save(product.get());	
+			sale = saleService.save(sale);
+			cartService.delete(cart.getId());
 		}
 	}
 

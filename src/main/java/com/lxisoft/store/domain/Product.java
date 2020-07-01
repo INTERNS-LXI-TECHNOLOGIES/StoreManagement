@@ -50,6 +50,9 @@ public class Product implements Serializable {
     private String warranty;
 
     @OneToMany(mappedBy = "product")
+    private Set<Cart> carts = new HashSet<>();
+
+    @OneToMany(mappedBy = "product")
     private Set<Sale> sales = new HashSet<>();
 
     @ManyToOne
@@ -184,6 +187,31 @@ public class Product implements Serializable {
 
     public void setWarranty(String warranty) {
         this.warranty = warranty;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public Product carts(Set<Cart> carts) {
+        this.carts = carts;
+        return this;
+    }
+
+    public Product addCart(Cart cart) {
+        this.carts.add(cart);
+        cart.setProduct(this);
+        return this;
+    }
+
+    public Product removeCart(Cart cart) {
+        this.carts.remove(cart);
+        cart.setProduct(null);
+        return this;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 
     public Set<Sale> getSales() {

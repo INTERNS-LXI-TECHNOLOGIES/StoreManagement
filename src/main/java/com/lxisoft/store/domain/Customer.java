@@ -30,6 +30,9 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer")
     private Set<Sale> sales = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer")
+    private Set<Cart> carts = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "customers", allowSetters = true)
     private Store store;
@@ -92,6 +95,31 @@ public class Customer implements Serializable {
 
     public void setSales(Set<Sale> sales) {
         this.sales = sales;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public Customer carts(Set<Cart> carts) {
+        this.carts = carts;
+        return this;
+    }
+
+    public Customer addCart(Cart cart) {
+        this.carts.add(cart);
+        cart.setCustomer(this);
+        return this;
+    }
+
+    public Customer removeCart(Cart cart) {
+        this.carts.remove(cart);
+        cart.setCustomer(null);
+        return this;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 
     public Store getStore() {

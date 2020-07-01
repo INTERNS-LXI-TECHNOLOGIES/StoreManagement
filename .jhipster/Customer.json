@@ -18,6 +18,12 @@
       "relationshipName": "sale"
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "cart",
+      "otherEntityRelationshipName": "customer",
+      "relationshipName": "cart"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "store",
       "otherEntityRelationshipName": "customer",

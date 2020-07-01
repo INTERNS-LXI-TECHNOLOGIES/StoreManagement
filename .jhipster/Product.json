@@ -41,6 +41,12 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
+      "otherEntityName": "cart",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "cart"
+    },
+    {
+      "relationshipType": "one-to-many",
       "otherEntityName": "sale",
       "otherEntityRelationshipName": "product",
       "relationshipName": "sale"
