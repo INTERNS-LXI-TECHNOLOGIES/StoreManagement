@@ -1,5 +1,8 @@
 entity Store{
-	name String
+	name String,
+	description String,
+	phoneNumber String
+	
 }
 
 entity Product {
@@ -11,7 +14,9 @@ entity Product {
 	noOfStock Long,
 	manufacturingDate Instant,
 	expiringDate Instant,
-	warranty String
+	warranty String,
+	imageLink String,
+    image Blob
 	} 
 	
 entity Category	{

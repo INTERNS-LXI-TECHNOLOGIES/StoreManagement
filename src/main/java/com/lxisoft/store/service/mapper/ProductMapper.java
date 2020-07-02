@@ -1,6 +1,5 @@
 package com.lxisoft.store.service.mapper;
 
-
 import com.lxisoft.store.domain.*;
 import com.lxisoft.store.service.dto.ProductDTO;
 

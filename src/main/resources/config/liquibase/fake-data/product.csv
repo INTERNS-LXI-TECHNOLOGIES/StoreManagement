@@ -1,11 +1,11 @@
-id;name;description;brand;quantity;price;no_of_stock;manufacturing_date;expiring_date;warranty
-1;Generic Steel Tuna;website calculating;cross-platform support;navigate wireless Chilean Peso Unidades de fomento;9665;76146;2020-06-17T10:57:57;2020-06-17T14:05:28;deposit Sri Lanka Rupee THX
-2;Refined Metal Car;Centers Steel Credit Card Account;networks infomediaries;partnerships throughput;54662;46442;2020-06-17T10:40:16;2020-06-17T12:04:56;intermediate withdrawal Bedfordshire
-3;Credit Card Account;Gloves Lao People's Democratic Republic;neutral;Rustic Concrete Car;78661;16911;2020-06-18T05:45:51;2020-06-17T18:56:08;Identity orange Security
-4;Data Identity;Dynamic auxiliary;Human New Mexico Implementation;Awesome Wooden Shirt;27546;52784;2020-06-18T01:57:55;2020-06-17T21:06:26;Crossroad invoice
-5;Liaison;Keyboard;Central Ergonomic Concrete Ball;pixel Gorgeous Rubber Cheese quantifying;16934;78950;2020-06-18T00:25:43;2020-06-17T08:45:53;South Dakota Underpass virtual
-6;Stand-alone Computer efficient;Buckinghamshire;Practical AGP Implementation;wireless navigate grey;45572;31592;2020-06-17T12:06:56;2020-06-18T07:54:08;Massachusetts Checking Account Gorgeous Fresh Ball
-7;Unbranded Steel Computer;Plastic convergence;back-end Automotive internet solution;Zimbabwe Small Wooden Chicken Balboa US Dollar;95388;96045;2020-06-17T14:30:11;2020-06-17T13:33:48;Incredible Steel Soap Outdoors
-8;Global Algeria Executive;Down-sized;Gorgeous Fresh Pants optical Practical;Solutions interactive International;80985;46586;2020-06-17T13:29:48;2020-06-17T18:14:34;Practical Frozen Shirt Bedfordshire
-9;capacity invoice e-services;Security Ramp Ball;project Assistant;Berkshire;28155;71391;2020-06-18T02:40:31;2020-06-17T09:13:46;Accounts convergence
-10;moratorium Concrete;capability transmit calculate;global;Paradigm;33901;2937;2020-06-18T02:21:56;2020-06-17T17:59:19;bandwidth Small
+id;name;description;brand;quantity;price;no_of_stock;manufacturing_date;expiring_date;warranty;image_link;image;image_content_type
+1;Generic Steel Tuna;website calculating;cross-platform support;navigate wireless Chilean Peso Unidades de fomento;9665;76146;2020-06-17T10:57:57;2020-06-17T14:05:28;deposit Sri Lanka Rupee THX;Refined Metal Car;../fake-data/blob/hipster.png;image/png
+2;Centers Steel Credit Card Account;networks infomediaries;partnerships throughput;Union transmitting;27988;55080;2020-06-17T17:12:38;2020-06-18T01:15:00;green Credit Card Account;Gloves Lao People's Democratic Republic;../fake-data/blob/hipster.png;image/png
+3;neutral;Rustic Concrete Car;Computer Oklahoma Identity;throughput;9548;46269;2020-06-17T09:44:02;2020-06-17T13:11:02;distributed Dynamic auxiliary;Human New Mexico Implementation;../fake-data/blob/hipster.png;image/png
+4;Awesome Wooden Shirt;Ethiopia;withdrawal Rubber;Chips Bike Keyboard;47207;88935;2020-06-17T21:23:40;2020-06-18T07:06:30;black;pixel Gorgeous Rubber Cheese quantifying;../fake-data/blob/hipster.png;image/png
+5;cross-platform;multi-byte online Forward;open-source;Computer efficient Sleek Soft Sausages;8835;44109;2020-06-17T11:52:56;2020-06-18T02:30:19;lavender wireless navigate;brand;../fake-data/blob/hipster.png;image/png
+6;backing up;Massachusetts Checking Account Gorgeous Fresh Ball;Unbranded Steel Computer;Plastic convergence;98208;78668;2020-06-18T04:40:43;2020-06-18T07:52:11;internet solution Operations Associate;Chicken;../fake-data/blob/hipster.png;image/png
+7;Personal Loan Account Mobility multi-byte;clicks-and-mortar;Outdoors programming;Algeria Executive;12685;25242;2020-06-18T03:15:33;2020-06-17T16:15:23;transitional;optical Practical;../fake-data/blob/hipster.png;image/png
+8;Solutions interactive International;Square Home Loan Account Practical Frozen Shirt;Sausages capacity;Administrator open system;94054;10382;2020-06-17T21:14:18;2020-06-17T16:20:11;executive;mobile;../fake-data/blob/hipster.png;image/png
+9;Sleek Gateway program;invoice index Borders;Pula;copying;14752;77195;2020-06-17T12:41:03;2020-06-17T14:22:58;pink clear-thinking;focus group Computers Home Loan Account;../fake-data/blob/hipster.png;image/png
+10;Brunei Dollar Electronics;turquoise Engineer;generating;index;37295;61683;2020-06-17T20:14:57;2020-06-17T23:46:12;intuitive Chicken;turquoise;../fake-data/blob/hipster.png;image/png

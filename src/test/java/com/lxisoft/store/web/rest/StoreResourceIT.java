@@ -6,19 +6,25 @@ import com.lxisoft.store.repository.StoreRepository;
 import com.lxisoft.store.service.StoreService;
 import com.lxisoft.store.service.dto.StoreDTO;
 import com.lxisoft.store.service.mapper.StoreMapper;
+import com.lxisoft.store.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.lxisoft.store.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,12 +34,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link StoreResource} REST controller.
  */
 @SpringBootTest(classes = StoreManagementApp.class)
-@AutoConfigureMockMvc
-@WithMockUser
 public class StoreResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PHONE_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE_NUMBER = "BBBBBBBBBB";
 
     @Autowired
     private StoreRepository storeRepository;
@@ -45,12 +55,35 @@ public class StoreResourceIT {
     private StoreService storeService;
 
     @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
+    private Validator validator;
+
     private MockMvc restStoreMockMvc;
 
     private Store store;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final StoreResource storeResource = new StoreResource(storeService);
+        this.restStoreMockMvc = MockMvcBuilders.standaloneSetup(storeResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+    }
 
     /**
      * Create an entity for this test.
@@ -60,7 +93,9 @@ public class StoreResourceIT {
      */
     public static Store createEntity(EntityManager em) {
         Store store = new Store()
-            .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
+            .phoneNumber(DEFAULT_PHONE_NUMBER);
         return store;
     }
     /**
@@ -71,7 +106,9 @@ public class StoreResourceIT {
      */
     public static Store createUpdatedEntity(EntityManager em) {
         Store store = new Store()
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .phoneNumber(UPDATED_PHONE_NUMBER);
         return store;
     }
 
@@ -84,10 +121,11 @@ public class StoreResourceIT {
     @Transactional
     public void createStore() throws Exception {
         int databaseSizeBeforeCreate = storeRepository.findAll().size();
+
         // Create the Store
         StoreDTO storeDTO = storeMapper.toDto(store);
         restStoreMockMvc.perform(post("/api/stores")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(storeDTO)))
             .andExpect(status().isCreated());
 
@@ -96,6 +134,8 @@ public class StoreResourceIT {
         assertThat(storeList).hasSize(databaseSizeBeforeCreate + 1);
         Store testStore = storeList.get(storeList.size() - 1);
         assertThat(testStore.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testStore.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testStore.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
     }
 
     @Test
@@ -109,7 +149,7 @@ public class StoreResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restStoreMockMvc.perform(post("/api/stores")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(storeDTO)))
             .andExpect(status().isBadRequest());
 
@@ -128,9 +168,11 @@ public class StoreResourceIT {
         // Get all the storeList
         restStoreMockMvc.perform(get("/api/stores?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(store.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)));
     }
     
     @Test
@@ -142,10 +184,13 @@ public class StoreResourceIT {
         // Get the store
         restStoreMockMvc.perform(get("/api/stores/{id}", store.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(store.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER));
     }
+
     @Test
     @Transactional
     public void getNonExistingStore() throws Exception {
@@ -167,11 +212,13 @@ public class StoreResourceIT {
         // Disconnect from session so that the updates on updatedStore are not directly saved in db
         em.detach(updatedStore);
         updatedStore
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .phoneNumber(UPDATED_PHONE_NUMBER);
         StoreDTO storeDTO = storeMapper.toDto(updatedStore);
 
         restStoreMockMvc.perform(put("/api/stores")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(storeDTO)))
             .andExpect(status().isOk());
 
@@ -180,6 +227,8 @@ public class StoreResourceIT {
         assertThat(storeList).hasSize(databaseSizeBeforeUpdate);
         Store testStore = storeList.get(storeList.size() - 1);
         assertThat(testStore.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testStore.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testStore.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
     }
 
     @Test
@@ -192,7 +241,7 @@ public class StoreResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restStoreMockMvc.perform(put("/api/stores")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(storeDTO)))
             .andExpect(status().isBadRequest());
 
@@ -211,7 +260,7 @@ public class StoreResourceIT {
 
         // Delete the store
         restStoreMockMvc.perform(delete("/api/stores/{id}", store.getId())
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
