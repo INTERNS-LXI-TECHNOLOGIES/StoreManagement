@@ -23,12 +23,6 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "customer",
-            "otherEntityRelationshipName": "store",
-            "relationshipName": "customer"
-        },
-        {
-            "relationshipType": "one-to-many",
             "otherEntityName": "category",
             "otherEntityRelationshipName": "store",
             "relationshipName": "category"

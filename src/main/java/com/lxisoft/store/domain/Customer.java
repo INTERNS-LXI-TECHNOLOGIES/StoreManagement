@@ -1,7 +1,5 @@
 package com.lxisoft.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -27,17 +25,19 @@ public class Customer implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @OneToMany(mappedBy = "customer")
     private Set<Sale> sales = new HashSet<>();
 
     @OneToMany(mappedBy = "customer")
     private Set<Cart> carts = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "customers", allowSetters = true)
-    private Store store;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -70,6 +70,32 @@ public class Customer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Customer address(String address) {
+        this.address = address;
+        return this;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Customer phoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Set<Sale> getSales() {
@@ -121,20 +147,7 @@ public class Customer implements Serializable {
     public void setCarts(Set<Cart> carts) {
         this.carts = carts;
     }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public Customer store(Store store) {
-        this.store = store;
-        return this;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -152,13 +165,14 @@ public class Customer implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "Customer{" +
             "id=" + getId() +
             ", idpCode='" + getIdpCode() + "'" +
             ", name='" + getName() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
             "}";
     }
 }

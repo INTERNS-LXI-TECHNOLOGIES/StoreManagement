@@ -14,8 +14,6 @@ public interface StoreMapper extends EntityMapper<StoreDTO, Store> {
 
     @Mapping(target = "products", ignore = true)
     @Mapping(target = "removeProduct", ignore = true)
-    @Mapping(target = "customers", ignore = true)
-    @Mapping(target = "removeCustomer", ignore = true)
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "removeCategory", ignore = true)
     Store toEntity(StoreDTO storeDTO);
