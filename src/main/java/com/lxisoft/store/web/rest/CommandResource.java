@@ -48,7 +48,7 @@ public class CommandResource {
 	 *
 	 */
 	@PostMapping("/addcart/{customerId}/{noOfProduct}")
-	public cart addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
+	public CartDTO addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
 	CartDTO cart =new CartDTO();
 	cart.setCustomerId(customerId);
 	cart.setNoOfProduct(noOfProduct);
@@ -56,6 +56,7 @@ public class CommandResource {
 	cart.setProductId(productDTO.getId());
 	cart.setProductName(productDTO.getName());
 	cartService.save(cart);
+	return cart;
 	}
 	/**
 	 * Add the list of cart to sale
