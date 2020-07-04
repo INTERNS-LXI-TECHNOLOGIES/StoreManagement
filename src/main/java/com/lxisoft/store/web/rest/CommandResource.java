@@ -48,7 +48,7 @@ public class CommandResource {
 	 *
 	 */
 	@PostMapping("/addcart/{customerId}/{noOfProduct}")
-	public void addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
+	public cart addCart(@PathVariable Long customerId,@PathVariable Long noOfProduct, @RequestBody  ProductDTO  productDTO) {
 	CartDTO cart =new CartDTO();
 	cart.setCustomerId(customerId);
 	cart.setNoOfProduct(noOfProduct);
