@@ -73,7 +73,7 @@ public class QueryResource {
 		log.debug("<<<<< findStockByProductId >>>>>>");
 		return productService.findOne(productId).get().getNoOfStock();
 	}
-	
+	//findProductByBrand
 	 
 
 }
