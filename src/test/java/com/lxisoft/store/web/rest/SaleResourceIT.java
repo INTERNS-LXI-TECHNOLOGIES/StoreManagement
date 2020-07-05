@@ -6,21 +6,27 @@ import com.lxisoft.store.repository.SaleRepository;
 import com.lxisoft.store.service.SaleService;
 import com.lxisoft.store.service.dto.SaleDTO;
 import com.lxisoft.store.service.mapper.SaleMapper;
+import com.lxisoft.store.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
+
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.lxisoft.store.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,8 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link SaleResource} REST controller.
  */
 @SpringBootTest(classes = StoreManagementApp.class)
-@AutoConfigureMockMvc
-@WithMockUser
 public class SaleResourceIT {
 
     private static final Long DEFAULT_NO_OF_PRODUCT = 1L;
@@ -43,6 +47,12 @@ public class SaleResourceIT {
     private static final Double DEFAULT_AMOUNT = 1D;
     private static final Double UPDATED_AMOUNT = 2D;
 
+    private static final Long DEFAULT_UNIT_COST = 1L;
+    private static final Long UPDATED_UNIT_COST = 2L;
+
+    private static final String DEFAULT_PRODUCT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_PRODUCT_NAME = "BBBBBBBBBB";
+
     @Autowired
     private SaleRepository saleRepository;
 
@@ -53,12 +63,35 @@ public class SaleResourceIT {
     private SaleService saleService;
 
     @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
+    private Validator validator;
+
     private MockMvc restSaleMockMvc;
 
     private Sale sale;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final SaleResource saleResource = new SaleResource(saleService);
+        this.restSaleMockMvc = MockMvcBuilders.standaloneSetup(saleResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+    }
 
     /**
      * Create an entity for this test.
@@ -70,7 +103,9 @@ public class SaleResourceIT {
         Sale sale = new Sale()
             .noOfProduct(DEFAULT_NO_OF_PRODUCT)
             .date(DEFAULT_DATE)
-            .amount(DEFAULT_AMOUNT);
+            .amount(DEFAULT_AMOUNT)
+            .unitCost(DEFAULT_UNIT_COST)
+            .productName(DEFAULT_PRODUCT_NAME);
         return sale;
     }
     /**
@@ -83,7 +118,9 @@ public class SaleResourceIT {
         Sale sale = new Sale()
             .noOfProduct(UPDATED_NO_OF_PRODUCT)
             .date(UPDATED_DATE)
-            .amount(UPDATED_AMOUNT);
+            .amount(UPDATED_AMOUNT)
+            .unitCost(UPDATED_UNIT_COST)
+            .productName(UPDATED_PRODUCT_NAME);
         return sale;
     }
 
@@ -96,10 +133,11 @@ public class SaleResourceIT {
     @Transactional
     public void createSale() throws Exception {
         int databaseSizeBeforeCreate = saleRepository.findAll().size();
+
         // Create the Sale
         SaleDTO saleDTO = saleMapper.toDto(sale);
         restSaleMockMvc.perform(post("/api/sales")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(saleDTO)))
             .andExpect(status().isCreated());
 
@@ -110,6 +148,8 @@ public class SaleResourceIT {
         assertThat(testSale.getNoOfProduct()).isEqualTo(DEFAULT_NO_OF_PRODUCT);
         assertThat(testSale.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testSale.getAmount()).isEqualTo(DEFAULT_AMOUNT);
+        assertThat(testSale.getUnitCost()).isEqualTo(DEFAULT_UNIT_COST);
+        assertThat(testSale.getProductName()).isEqualTo(DEFAULT_PRODUCT_NAME);
     }
 
     @Test
@@ -123,7 +163,7 @@ public class SaleResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSaleMockMvc.perform(post("/api/sales")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(saleDTO)))
             .andExpect(status().isBadRequest());
 
@@ -142,11 +182,13 @@ public class SaleResourceIT {
         // Get all the saleList
         restSaleMockMvc.perform(get("/api/sales?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(sale.getId().intValue())))
             .andExpect(jsonPath("$.[*].noOfProduct").value(hasItem(DEFAULT_NO_OF_PRODUCT.intValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())));
+            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
+            .andExpect(jsonPath("$.[*].unitCost").value(hasItem(DEFAULT_UNIT_COST.intValue())))
+            .andExpect(jsonPath("$.[*].productName").value(hasItem(DEFAULT_PRODUCT_NAME)));
     }
     
     @Test
@@ -158,12 +200,15 @@ public class SaleResourceIT {
         // Get the sale
         restSaleMockMvc.perform(get("/api/sales/{id}", sale.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(sale.getId().intValue()))
             .andExpect(jsonPath("$.noOfProduct").value(DEFAULT_NO_OF_PRODUCT.intValue()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
-            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()));
+            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
+            .andExpect(jsonPath("$.unitCost").value(DEFAULT_UNIT_COST.intValue()))
+            .andExpect(jsonPath("$.productName").value(DEFAULT_PRODUCT_NAME));
     }
+
     @Test
     @Transactional
     public void getNonExistingSale() throws Exception {
@@ -187,11 +232,13 @@ public class SaleResourceIT {
         updatedSale
             .noOfProduct(UPDATED_NO_OF_PRODUCT)
             .date(UPDATED_DATE)
-            .amount(UPDATED_AMOUNT);
+            .amount(UPDATED_AMOUNT)
+            .unitCost(UPDATED_UNIT_COST)
+            .productName(UPDATED_PRODUCT_NAME);
         SaleDTO saleDTO = saleMapper.toDto(updatedSale);
 
         restSaleMockMvc.perform(put("/api/sales")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(saleDTO)))
             .andExpect(status().isOk());
 
@@ -202,6 +249,8 @@ public class SaleResourceIT {
         assertThat(testSale.getNoOfProduct()).isEqualTo(UPDATED_NO_OF_PRODUCT);
         assertThat(testSale.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testSale.getAmount()).isEqualTo(UPDATED_AMOUNT);
+        assertThat(testSale.getUnitCost()).isEqualTo(UPDATED_UNIT_COST);
+        assertThat(testSale.getProductName()).isEqualTo(UPDATED_PRODUCT_NAME);
     }
 
     @Test
@@ -214,7 +263,7 @@ public class SaleResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSaleMockMvc.perform(put("/api/sales")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(saleDTO)))
             .andExpect(status().isBadRequest());
 
@@ -233,7 +282,7 @@ public class SaleResourceIT {
 
         // Delete the sale
         restSaleMockMvc.perform(delete("/api/sales/{id}", sale.getId())
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

@@ -1,9 +1,9 @@
 package com.lxisoft.store.repository;
 
 import com.lxisoft.store.domain.Category;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
+
 
 /**
  * Spring Data  repository for the Category entity.
@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
 }

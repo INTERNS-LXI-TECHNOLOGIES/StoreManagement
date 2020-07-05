@@ -34,6 +34,9 @@ public class Store implements Serializable {
     @OneToMany(mappedBy = "store")
     private Set<Category> categories = new HashSet<>();
 
+    @OneToMany(mappedBy = "store")
+    private Set<Sale> sales = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -130,6 +133,31 @@ public class Store implements Serializable {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public Set<Sale> getSales() {
+        return sales;
+    }
+
+    public Store sales(Set<Sale> sales) {
+        this.sales = sales;
+        return this;
+    }
+
+    public Store addSale(Sale sale) {
+        this.sales.add(sale);
+        sale.setStore(this);
+        return this;
+    }
+
+    public Store removeSale(Sale sale) {
+        this.sales.remove(sale);
+        sale.setStore(null);
+        return this;
+    }
+
+    public void setSales(Set<Sale> sales) {
+        this.sales = sales;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

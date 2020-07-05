@@ -1,5 +1,4 @@
 package com.lxisoft.store.domain;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -27,14 +26,24 @@ public class Category implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image_link")
+    private String imageLink;
+
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_content_type")
+    private String imageContentType;
+
     @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "categories", allowSetters = true)
+    @JsonIgnoreProperties("categories")
     private Store store;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -67,6 +76,45 @@ public class Category implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public Category imageLink(String imageLink) {
+        this.imageLink = imageLink;
+        return this;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public Category image(byte[] image) {
+        this.image = image;
+        return this;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageContentType() {
+        return imageContentType;
+    }
+
+    public Category imageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
+        return this;
+    }
+
+    public void setImageContentType(String imageContentType) {
+        this.imageContentType = imageContentType;
     }
 
     public Set<Product> getProducts() {
@@ -106,7 +154,7 @@ public class Category implements Serializable {
     public void setStore(Store store) {
         this.store = store;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -124,13 +172,15 @@ public class Category implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "Category{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", imageLink='" + getImageLink() + "'" +
+            ", image='" + getImage() + "'" +
+            ", imageContentType='" + getImageContentType() + "'" +
             "}";
     }
 }

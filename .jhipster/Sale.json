@@ -1,44 +1,59 @@
 {
-  "name": "Sale",
-  "fields": [
-    {
-      "fieldName": "noOfProduct",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "date",
-      "fieldType": "Instant"
-    },
-    {
-      "fieldName": "amount",
-      "fieldType": "Double"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "customer",
-      "otherEntityRelationshipName": "sale",
-      "relationshipName": "customer",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "product",
-      "otherEntityRelationshipName": "sale",
-      "relationshipName": "product",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20200625055226",
-  "entityTableName": "sale",
-  "dto": "mapstruct",
-  "pagination": "no",
-  "service": "serviceImpl",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "embedded": false
+    "name": "Sale",
+    "fields": [
+        {
+            "fieldName": "noOfProduct",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "date",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "unitCost",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "productName",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "sale",
+            "relationshipName": "customer",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "product",
+            "otherEntityRelationshipName": "sale",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "store",
+            "otherEntityRelationshipName": "sale",
+            "relationshipName": "store",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200625055226",
+    "entityTableName": "sale",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "embedded": false
 }

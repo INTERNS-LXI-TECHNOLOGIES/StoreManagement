@@ -22,12 +22,16 @@ entity Product {
 entity Category	{
     name String,
 	description String,
+	imageLink String,
+    image Blob
 	}
  
 entity Sale{
     noOfProduct Long,
 	date Instant,
-	amount Double
+	amount Double,
+	unitCost Long,
+	productName String
 	}
 	
 entity Customer{
@@ -49,7 +53,8 @@ relationship OneToMany{
 	Customer{sale} to Sale{customer},
 	Customer{cart} to Cart{customer},	 
     Product{cart} to Cart{product},
-    Product{sale} to Sale{product}
+    Product{sale} to Sale{product},
+	Store{sale} to Sale{store}
 }
  
 

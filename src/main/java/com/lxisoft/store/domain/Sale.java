@@ -1,5 +1,4 @@
 package com.lxisoft.store.domain;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -29,15 +28,25 @@ public class Sale implements Serializable {
     @Column(name = "amount")
     private Double amount;
 
+    @Column(name = "unit_cost")
+    private Long unitCost;
+
+    @Column(name = "product_name")
+    private String productName;
+
     @ManyToOne
-    @JsonIgnoreProperties(value = "sales", allowSetters = true)
+    @JsonIgnoreProperties("sales")
     private Customer customer;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "sales", allowSetters = true)
+    @JsonIgnoreProperties("sales")
     private Product product;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    @ManyToOne
+    @JsonIgnoreProperties("sales")
+    private Store store;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -85,6 +94,32 @@ public class Sale implements Serializable {
         this.amount = amount;
     }
 
+    public Long getUnitCost() {
+        return unitCost;
+    }
+
+    public Sale unitCost(Long unitCost) {
+        this.unitCost = unitCost;
+        return this;
+    }
+
+    public void setUnitCost(Long unitCost) {
+        this.unitCost = unitCost;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Sale productName(String productName) {
+        this.productName = productName;
+        return this;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -110,7 +145,20 @@ public class Sale implements Serializable {
     public void setProduct(Product product) {
         this.product = product;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public Store getStore() {
+        return store;
+    }
+
+    public Sale store(Store store) {
+        this.store = store;
+        return this;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -128,7 +176,6 @@ public class Sale implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "Sale{" +
@@ -136,6 +183,8 @@ public class Sale implements Serializable {
             ", noOfProduct=" + getNoOfProduct() +
             ", date='" + getDate() + "'" +
             ", amount=" + getAmount() +
+            ", unitCost=" + getUnitCost() +
+            ", productName='" + getProductName() + "'" +
             "}";
     }
 }

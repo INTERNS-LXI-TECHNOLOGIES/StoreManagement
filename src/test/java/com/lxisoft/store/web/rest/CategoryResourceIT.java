@@ -6,19 +6,26 @@ import com.lxisoft.store.repository.CategoryRepository;
 import com.lxisoft.store.service.CategoryService;
 import com.lxisoft.store.service.dto.CategoryDTO;
 import com.lxisoft.store.service.mapper.CategoryMapper;
+import com.lxisoft.store.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
+import org.springframework.validation.Validator;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.lxisoft.store.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,8 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link CategoryResource} REST controller.
  */
 @SpringBootTest(classes = StoreManagementApp.class)
-@AutoConfigureMockMvc
-@WithMockUser
 public class CategoryResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -37,6 +42,14 @@ public class CategoryResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_IMAGE_LINK = "AAAAAAAAAA";
+    private static final String UPDATED_IMAGE_LINK = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -48,12 +61,35 @@ public class CategoryResourceIT {
     private CategoryService categoryService;
 
     @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
+    private Validator validator;
+
     private MockMvc restCategoryMockMvc;
 
     private Category category;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final CategoryResource categoryResource = new CategoryResource(categoryService);
+        this.restCategoryMockMvc = MockMvcBuilders.standaloneSetup(categoryResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+    }
 
     /**
      * Create an entity for this test.
@@ -64,7 +100,10 @@ public class CategoryResourceIT {
     public static Category createEntity(EntityManager em) {
         Category category = new Category()
             .name(DEFAULT_NAME)
-            .description(DEFAULT_DESCRIPTION);
+            .description(DEFAULT_DESCRIPTION)
+            .imageLink(DEFAULT_IMAGE_LINK)
+            .image(DEFAULT_IMAGE)
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
         return category;
     }
     /**
@@ -76,7 +115,10 @@ public class CategoryResourceIT {
     public static Category createUpdatedEntity(EntityManager em) {
         Category category = new Category()
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .imageLink(UPDATED_IMAGE_LINK)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
         return category;
     }
 
@@ -89,10 +131,11 @@ public class CategoryResourceIT {
     @Transactional
     public void createCategory() throws Exception {
         int databaseSizeBeforeCreate = categoryRepository.findAll().size();
+
         // Create the Category
         CategoryDTO categoryDTO = categoryMapper.toDto(category);
         restCategoryMockMvc.perform(post("/api/categories")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(categoryDTO)))
             .andExpect(status().isCreated());
 
@@ -102,6 +145,9 @@ public class CategoryResourceIT {
         Category testCategory = categoryList.get(categoryList.size() - 1);
         assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCategory.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testCategory.getImageLink()).isEqualTo(DEFAULT_IMAGE_LINK);
+        assertThat(testCategory.getImage()).isEqualTo(DEFAULT_IMAGE);
+        assertThat(testCategory.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
     }
 
     @Test
@@ -115,7 +161,7 @@ public class CategoryResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCategoryMockMvc.perform(post("/api/categories")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(categoryDTO)))
             .andExpect(status().isBadRequest());
 
@@ -134,10 +180,13 @@ public class CategoryResourceIT {
         // Get all the categoryList
         restCategoryMockMvc.perform(get("/api/categories?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(category.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].imageLink").value(hasItem(DEFAULT_IMAGE_LINK)))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
     
     @Test
@@ -149,11 +198,15 @@ public class CategoryResourceIT {
         // Get the category
         restCategoryMockMvc.perform(get("/api/categories/{id}", category.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(category.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.imageLink").value(DEFAULT_IMAGE_LINK))
+            .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
     }
+
     @Test
     @Transactional
     public void getNonExistingCategory() throws Exception {
@@ -176,11 +229,14 @@ public class CategoryResourceIT {
         em.detach(updatedCategory);
         updatedCategory
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .imageLink(UPDATED_IMAGE_LINK)
+            .image(UPDATED_IMAGE)
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
         CategoryDTO categoryDTO = categoryMapper.toDto(updatedCategory);
 
         restCategoryMockMvc.perform(put("/api/categories")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(categoryDTO)))
             .andExpect(status().isOk());
 
@@ -190,6 +246,9 @@ public class CategoryResourceIT {
         Category testCategory = categoryList.get(categoryList.size() - 1);
         assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testCategory.getImageLink()).isEqualTo(UPDATED_IMAGE_LINK);
+        assertThat(testCategory.getImage()).isEqualTo(UPDATED_IMAGE);
+        assertThat(testCategory.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
     }
 
     @Test
@@ -202,7 +261,7 @@ public class CategoryResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCategoryMockMvc.perform(put("/api/categories")
-            .contentType(MediaType.APPLICATION_JSON)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(categoryDTO)))
             .andExpect(status().isBadRequest());
 
@@ -221,7 +280,7 @@ public class CategoryResourceIT {
 
         // Delete the category
         restCategoryMockMvc.perform(delete("/api/categories/{id}", category.getId())
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

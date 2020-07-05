@@ -26,6 +26,12 @@
             "otherEntityName": "category",
             "otherEntityRelationshipName": "store",
             "relationshipName": "category"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "sale",
+            "otherEntityRelationshipName": "store",
+            "relationshipName": "sale"
         }
     ],
     "changelogDate": "20200618083130",
