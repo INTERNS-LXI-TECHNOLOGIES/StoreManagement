@@ -10,7 +10,7 @@ import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.SaleService;
 
 import java.time.Instant;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,44 +49,22 @@ public class CommandResource {
 
 	/**
 	 * Add the list of product to cart
-	 *@author ajay
+	 * 
+	 * @author ajay
 	 */
-	@PostMapping("/addcart/{customerId}/{noOfProduct}")
-	public CartDTO addCart(@PathVariable Long customerId, @PathVariable Long noOfProduct,
-			@RequestBody ProductDTO productDTO) {
-		CartDTO cart = new CartDTO();
-		cart.setCustomerId(customerId);
-		cart.setNoOfProduct(noOfProduct);
-		cart.setAmount((productDTO.getPrice() * noOfProduct));
-		cart.setProductId(productDTO.getId());
-		cart.setProductName(productDTO.getName());
-		List<CartDTO> cartList = cartService.findAll();
-		/*boolean flag to check whether to add cart or not*/
-		boolean addFlag = true;
-		/*loop to check if same product exist in cart already*/
-		for (CartDTO c : cartList) {
-			/*To check cartlist contains same cart with same customer and product id's*/
-			if ((c.getCustomerId() == cart.getCustomerId()) && (c.getProductId() == cart.getProductId())) {
-				/* To check , selected noOfProduct doesnot exceeds the product's original stock  */
-				if (productService.findOne(c.getProductId()).get()
-						.getNoOfStock() >= (c.getNoOfProduct() + cart.getNoOfProduct())) {
-					/*Update noOfProduct and amount*/
-					c.setNoOfProduct(c.getNoOfProduct() + cart.getNoOfProduct());
-					c.setAmount(c.getAmount() + cart.getAmount());
-					cart = c;
-				} 
-				/*If noOfProduct exceeds the product's original stock ,it must not add to cart*/
-				else
-					addFlag = false;
-			}
-		}
-		if (addFlag)
-			cart = cartService.save(cart);
-		return cart;
- 
-	}
+	@PostMapping("/addcart/{customerId}")
+	public CartDTO addCart(@PathVariable Long customerId, @RequestBody ProductDTO productDTO) {
+		CartDTO cartDTO = new CartDTO();
+		Long noOfProduct = 1l;
+		cartDTO.setCustomerId(customerId);
+		cartDTO.setNoOfProduct(noOfProduct);
+		cartDTO.setAmount((productDTO.getPrice() * noOfProduct));
+		cartDTO.setProductId(productDTO.getId());
+		cartDTO.setProductName(productDTO.getName());
+		cartDTO = cartService.save(cartDTO);
+		return cartDTO;
 
-	 
+	}
 
 	/**
 	 * Add the list of cart to sale
@@ -94,7 +72,11 @@ public class CommandResource {
 	 */
 
 	@PostMapping("/addsale/{customerId}")
-	public void addSale(@PathVariable Long customerId, @RequestBody List<CartDTO> cartDTO) {
+	public boolean addSale(@PathVariable Long customerId, @RequestBody List<CartDTO> cartDTO) {
+		boolean sucessFlag = true;
+		Optional<ProductDTO> product = null;
+		List<ProductDTO> productList = new ArrayList<ProductDTO>();
+		List<SaleDTO> salesList = new ArrayList<SaleDTO>();
 		for (CartDTO cart : cartDTO) {
 			SaleDTO sale = new SaleDTO();
 			Instant instant = Instant.now();
@@ -103,12 +85,24 @@ public class CommandResource {
 			sale.setDate(instant);
 			sale.setNoOfProduct(cart.getNoOfProduct());
 			sale.setProductId(cart.getProductId());
-			Optional<ProductDTO> product = productService.findOne(cart.getProductId());
-			product.get().setNoOfStock(product.get().getNoOfStock() - sale.getNoOfProduct());
-			productService.save(product.get());
-			sale = saleService.save(sale);
-			cartService.delete(cart.getId());
+			salesList.add(sale);
+			product = productService.findOne(cart.getProductId());
+			if (((product.get().getNoOfStock()) - cart.getNoOfProduct()) < 0) {
+				sucessFlag = false;
+				break;
+			} else
+				productList.add(product.get());
 		}
+		if (sucessFlag) {
+			for (int i = 0; i < productList.size(); i++) {
+				ProductDTO p = productList.get(i);
+				p.setNoOfStock(p.getNoOfStock() - cartDTO.get(i).getNoOfProduct());
+				cartService.delete(cartDTO.get(i).getId());
+				productService.save(p);
+				saleService.save(salesList.get(i));
+			}
+		}
+		return sucessFlag;
 	}
 
 }

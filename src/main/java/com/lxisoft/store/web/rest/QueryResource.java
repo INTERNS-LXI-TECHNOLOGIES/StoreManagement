@@ -3,7 +3,9 @@
  */
 package com.lxisoft.store.web.rest;
 
+import com.lxisoft.store.service.CartService;
 import com.lxisoft.store.service.ProductService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
 
 /**
@@ -29,6 +32,8 @@ public class QueryResource {
 	private final Logger log = LoggerFactory.getLogger(QueryResource.class);
 	@Autowired
 	ProductService productService;
+	@Autowired
+	private CartService cartService;
 
 	/**
 	 * To get all product under particular category by using category id Way:After
@@ -36,8 +41,8 @@ public class QueryResource {
 	 */
 	@GetMapping("/findAllProductsByCategoryId/{categoryId}")
 	public List<ProductDTO> findAllProductsByCategoryId(@PathVariable Long categoryId) {
-	 
-		log.debug("<<<<< findAllProductsByCategoryId >>>>>>" );
+
+		log.debug("<<<<< findAllProductsByCategoryId >>>>>>");
 		List<ProductDTO> resultantproduct = new ArrayList<ProductDTO>();
 		List<ProductDTO> productList = productService.findAll();
 		for (ProductDTO product : productList) {
@@ -58,7 +63,7 @@ public class QueryResource {
 		long totalStock = 0;
 		for (ProductDTO product : productList) {
 			if (product.getCategoryId() == categoryId) {
-				totalStock = totalStock + product.getNoOfStock();  
+				totalStock = totalStock + product.getNoOfStock();
 			}
 		}
 		return totalStock;
@@ -73,7 +78,19 @@ public class QueryResource {
 		log.debug("<<<<< findStockByProductId >>>>>>");
 		return productService.findOne(productId).get().getNoOfStock();
 	}
-	//findProductByBrand
-	 
+
+	@GetMapping("/findAllCartByCustomerId/{customerId}")
+	public List<CartDTO> findAllCartByCustomerId(@PathVariable Long customerId) {
+		log.debug("<<<<< findAllCartByCustomerId >>>>>>");
+		List<CartDTO> cartList = cartService.findAll();		
+		List<CartDTO> cartListResult=new ArrayList<CartDTO>(); 
+		 for (int i=0;i< cartList.size();i++) {log.debug("<<<<< tes >>>>>>");
+			if (cartList.get(i).getCustomerId() == customerId) {
+				cartListResult.add(cartList.get(i));
+				log.debug("<<<<< la >>>>>>");
+			}
+		 }
+		return cartListResult;
+	}
 
 }
