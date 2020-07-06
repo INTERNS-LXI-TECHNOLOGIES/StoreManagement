@@ -5,6 +5,7 @@ package com.lxisoft.store.web.rest;
 
 import com.lxisoft.store.service.CartService;
 import com.lxisoft.store.service.ProductService;
+import com.lxisoft.store.service.QueryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
+
+import net.sf.jasperreports.engine.JRException;
 
 /**
  * 
@@ -34,6 +41,66 @@ public class QueryResource {
 	ProductService productService;
 	@Autowired
 	private CartService cartService;
+	@Autowired
+	private QueryService queryService;
+	
+	
+	/**
+	 * GET  /pdf : get the pdf of invoice using database.
+	 *  
+	 * @return the byte[]
+	 * @return the ResponseEntity with status 200 (OK) and the pdf of invoice in body
+	 */
+	/*@GetMapping("/pdf")
+    public ResponseEntity<byte[]> getReportAsPdfUsingDataBase() {
+    	
+    	log.debug("REST request to get a pdf");
+       
+        byte[] pdfContents = null;
+      
+       try
+       {
+		pdfContents=queryService.getReportAsPdfUsingDataBase();
+       }catch(JRException e) {
+            e.printStackTrace();
+       }
+       
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        String fileName ="invoice_A4.pdf";
+		headers.add("content-disposition", "attachment; filename=" + fileName);
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+		            pdfContents, headers, HttpStatus.OK);	        
+        return response;
+    }*/
+
+	@GetMapping("/pdf/{customerId}")
+    public ResponseEntity<byte[]> getReportAsPdfUsingDataBase(@PathVariable Long customerId) {
+    	
+    	log.debug("REST request to get a pdf ");
+       
+        byte[] pdfContents = null;
+      
+        if(customerId !=null) {
+    	  System.out.println(">>>>>>>>>>>>>>>>>>>>>>> + customerId!=null");
+		  
+	      try
+	      {
+	    	  pdfContents=queryService.getReportAsPdfUsingDataBase(customerId);
+	      }catch(JRException e) {
+	            e.printStackTrace();
+	      }
+      }
+             
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        String fileName ="invoice.pdf";
+		headers.add("content-disposition", "attachment; filename=" + fileName);
+		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+		            pdfContents, headers, HttpStatus.OK);	
+		log.debug("!!!!!!!!!!!!!!!!!Success!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return response;
+    }
 
 	/**
 	 * To get all product under particular category by using category id Way:After
