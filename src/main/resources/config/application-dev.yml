@@ -64,8 +64,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:  
-    password:  
+    username:  ajay.e.s@lxisoft.com
+    password:  abcd1234#
     protocol: smtp
     tls: true
     properties.mail.smtp:

@@ -30,7 +30,7 @@ entity Sale{
     noOfProduct Long,
 	date Instant,
 	amount Double,
-	unitCost Long,
+	unitCost Double,
 	productName String
 	}
 	

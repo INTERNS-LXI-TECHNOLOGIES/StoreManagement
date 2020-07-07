@@ -7,6 +7,11 @@ import com.lxisoft.store.service.CartService;
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.QueryService;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +105,9 @@ public class QueryResource {
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
 		            pdfContents, headers, HttpStatus.OK);	
 		log.debug("!!!!!!!!!!!!!!!!!Success!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
+  		 
+  	       
         return response;
     }
 
@@ -151,10 +160,10 @@ public class QueryResource {
 		log.debug("<<<<< findAllCartByCustomerId >>>>>>");
 		List<CartDTO> cartList = cartService.findAll();		
 		List<CartDTO> cartListResult=new ArrayList<CartDTO>(); 
-		 for (int i=0;i< cartList.size();i++) {log.debug("<<<<< tes >>>>>>");
+		 for (int i=0;i< cartList.size();i++) { 
 			if (cartList.get(i).getCustomerId() == customerId) {
 				cartListResult.add(cartList.get(i));
-				log.debug("<<<<< la >>>>>>");
+				 
 			}
 		 }
 		return cartListResult;

@@ -1,89 +1,89 @@
 {
-    "name": "Product",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "brand",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "quantity",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "price",
-            "fieldType": "Double"
-        },
-        {
-            "fieldName": "noOfStock",
-            "fieldType": "Long"
-        },
-        {
-            "fieldName": "manufacturingDate",
-            "fieldType": "Instant"
-        },
-        {
-            "fieldName": "expiringDate",
-            "fieldType": "Instant"
-        },
-        {
-            "fieldName": "warranty",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "imageLink",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "image",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "any"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "cart",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "cart"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "sale",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "sale"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "store",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "store",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "category",
-            "otherEntityRelationshipName": "product",
-            "relationshipName": "category",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200618083131",
-    "entityTableName": "product",
-    "dto": "mapstruct",
-    "pagination": "no",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "embedded": false
+  "name": "Product",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "brand",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "quantity",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "noOfStock",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "manufacturingDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "expiringDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "warranty",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageLink",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "cart",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "cart"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "sale",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "sale"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "store",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "store",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "product",
+      "relationshipName": "category",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200618083131",
+  "entityTableName": "product",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "embedded": false
 }

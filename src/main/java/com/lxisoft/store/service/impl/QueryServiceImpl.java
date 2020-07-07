@@ -1,5 +1,7 @@
 package com.lxisoft.store.service.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.util.ResourceUtils;
 
 import com.lxisoft.store.service.QueryService;
 
@@ -84,7 +86,9 @@ public class QueryServiceImpl implements QueryService {
             }
             
  	  JasperPrint jp = JasperFillManager.fillReport(jr, parameters, conn);
-            
+ 	  
+     // JasperExportManager.exportReportToPdfFile(jp,"home/ajayrahul/jasperoutput/StyledTextReport.pdf");
+       
  	  return JasperExportManager.exportReportToPdf(jp);
 	}
 	     	

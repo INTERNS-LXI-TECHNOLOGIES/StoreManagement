@@ -1,4 +1,5 @@
 package com.lxisoft.store.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -29,24 +30,24 @@ public class Sale implements Serializable {
     private Double amount;
 
     @Column(name = "unit_cost")
-    private Long unitCost;
+    private Double unitCost;
 
     @Column(name = "product_name")
     private String productName;
 
     @ManyToOne
-    @JsonIgnoreProperties("sales")
+    @JsonIgnoreProperties(value = "sales", allowSetters = true)
     private Customer customer;
 
     @ManyToOne
-    @JsonIgnoreProperties("sales")
+    @JsonIgnoreProperties(value = "sales", allowSetters = true)
     private Product product;
 
     @ManyToOne
-    @JsonIgnoreProperties("sales")
+    @JsonIgnoreProperties(value = "sales", allowSetters = true)
     private Store store;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -94,16 +95,16 @@ public class Sale implements Serializable {
         this.amount = amount;
     }
 
-    public Long getUnitCost() {
+    public Double getUnitCost() {
         return unitCost;
     }
 
-    public Sale unitCost(Long unitCost) {
+    public Sale unitCost(Double unitCost) {
         this.unitCost = unitCost;
         return this;
     }
 
-    public void setUnitCost(Long unitCost) {
+    public void setUnitCost(Double unitCost) {
         this.unitCost = unitCost;
     }
 
@@ -158,7 +159,7 @@ public class Sale implements Serializable {
     public void setStore(Store store) {
         this.store = store;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -176,6 +177,7 @@ public class Sale implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Sale{" +
