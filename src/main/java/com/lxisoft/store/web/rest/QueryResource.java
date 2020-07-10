@@ -2,12 +2,12 @@
  * 
  */
 package com.lxisoft.store.web.rest;
+ 
 
-import com.lowagie.text.Header;
 import com.lxisoft.store.service.CartService; 
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.QueryService;
-import com.lxisoft.store.service.SaleService;
+import com.lxisoft.store.service.SaleService; 
 
 import java.util.ArrayList;
 import java.util.List; 
@@ -28,8 +28,7 @@ import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
 import com.lxisoft.store.service.dto.SaleDTO;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JRException; 
 
 /**
  * 
@@ -48,8 +47,7 @@ public class QueryResource {
 	private SaleService saleService;
 	@Autowired
 	private QueryService queryService;
-	
-	
+	 
 	/**
 	 * GET  /pdf : get the pdf of invoice using database.
 	 *  
@@ -83,10 +81,8 @@ public class QueryResource {
     public ResponseEntity<byte[]> getReportAsPdfUsingDataBase(@PathVariable Long customerId) {
     	
     	log.debug("REST request to get a pdf ");
-       
         byte[] pdfContents = null;
-      
-        if(customerId !=null) { 
+         if(customerId !=null) { 
 		  
 	      try
 	      {
@@ -171,9 +167,8 @@ public class QueryResource {
 		List<SaleDTO> saleList = saleService.findAll();		
 		List<SaleDTO> saleListResult=new ArrayList<SaleDTO>(); 
 		 for (int i=0;i< saleList.size();i++) { 
-			if (saleList.get(i).getCustomerId() == customerId) {
-				saleListResult.add(saleList.get(i));
-				 
+			if( (saleList.get(i).getCustomerId() == customerId)&&(!saleList.get(i).isStatus())) {
+				saleListResult.add(saleList.get(i));				 
 			}
 		 }
 		return saleListResult;

@@ -2,73 +2,44 @@
  * 
  */
 package com.lxisoft.store.web.rest;
-
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Cell;
+ 
 import com.lowagie.text.Document;
 
-//import com.lowagie.text.Document;
+ 
 
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
+import com.lowagie.text.DocumentException; 
 
 import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfDocument;
+import com.lowagie.text.Table; 
 import com.lowagie.text.pdf.PdfWriter;
-import com.lxisoft.store.service.CartService;
-import com.lxisoft.store.service.QueryService;
+import com.lxisoft.store.service.CartService; 
 import com.lxisoft.store.service.MailService;
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.UserService;
 import com.lxisoft.store.service.SaleService;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+ 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.FileOutputStream; 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Optional;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.border.Border;
-import javax.xml.parsers.DocumentBuilder;
-import java.io.File;
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.ResourceUtils;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.w3c.dom.NodeList;
 
 import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
 import com.lxisoft.store.service.dto.SaleDTO;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.util.Base64Util;
+ 
 
 /**
  *  
@@ -89,9 +60,7 @@ public class CommandResource {
 	@Autowired
 	private MailService mailService;
 	@Autowired
-	private UserService userService;
-	@Autowired
-	private QueryService queryService;
+	private UserService userService; 
 	@Autowired
 	private QueryResource queryResource;
 
@@ -128,9 +97,9 @@ public class CommandResource {
 		for (CartDTO cart : cartDTO) {
 			SaleDTO sale = new SaleDTO();
 			Instant instant = Instant.now();
-			sale.setAmount(cart.getAmount());
+			sale.setAmount(cart.getAmount()*cart.getNoOfProduct());
 			sale.setCustomerId(customerId);
-			sale.setDate(instant);
+			sale.setDate(instant); 
 			sale.setNoOfProduct(cart.getNoOfProduct());
 			sale.setProductId(cart.getProductId());
 			sale.setProductName(cart.getProductName());
@@ -145,39 +114,24 @@ public class CommandResource {
 			} else
 				productList.add(product.get());
 		}
-		Double totalAmount=0.0;
+		 
 		if (sucessFlag) {
 			for (int i = 0; i < productList.size(); i++) {
 				ProductDTO p = productList.get(i);
 				p.setNoOfStock(p.getNoOfStock() - cartDTO.get(i).getNoOfProduct());
 				cartService.delete(cartDTO.get(i).getId());
-				productService.save(p);
-				totalAmount=saveBillByCustomerId(customerId);
-				salesList.get(i).setStatus(true);
+				productService.save(p);			 
 				saleService.save(salesList.get(i));
 			}
 		}
 		/* Sending report to mail */
-		try {
-			queryService.getReportAsPdfUsingDataBase(customerId);
-
-		} catch (JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String mailId = userService.getUserWithAuthorities(customerId).get().getEmail();
-		String subject = "Shopping Bill";
-		String content = "Dear customer,\nYour Total Amount:"+totalAmount;
-
-		// String content=queryService.getReportAsPdfUsingDataBase(customerId);
-		mailService.sendEmail(mailId, subject, content, true, true);
-
-		log.debug("<<!!!!!!!!!!" + mailId + "!!!!!!!!!!!!!>>");
+		 
 		return sucessFlag;
 	}
-
-	@PostMapping("/myTesters/{customerId}")
-	public Double saveBillByCustomerId(@PathVariable Long customerId) {
+	 
+	@PostMapping("/saveBill/{customerId}")
+	public void saveBillByCustomerId(@PathVariable Long customerId) {
+		log.debug("inside saveBillByCustomerId");
 		Double total = 0.0;
 		Document pdfDoc = new Document(PageSize.A4);
 		try {
@@ -191,8 +145,7 @@ public class CommandResource {
 			List<SaleDTO> saleList = queryResource.findAllSaleByCustomerId(customerId);
 			
 			Table table= new Table(5);
-
-			table.addCell(" SLNO ");
+            table.addCell(" SLNO ");
 			table.addCell(" Product Name ");
 			table.addCell(" Quatity ");
 			table.addCell(" Unit Cost ");
@@ -204,6 +157,7 @@ public class CommandResource {
 				table.addCell(saleList.get(i - 1).getAmount().toString());
 				table.addCell(saleList.get(i - 1).getNoOfProduct().toString());
 				table.addCell(saleList.get(i - 1).getAmount().toString());
+				 
 				total = total + (saleList.get(i - 1).getAmount());
 			}
 			table.addCell(" NetTotal ");
@@ -218,13 +172,22 @@ public class CommandResource {
 		}
 
 		pdfDoc.close();
-		return total;
+		String mailId = userService.getUserWithAuthorities(customerId).get().getEmail();
+		String subject = "Shopping Bill";
+		String content = "Dear customer,Your bill is "+total;
+        mailService.sendEmail(mailId, subject, content, true, true);
 	}
-
+	@PostMapping("/completePurchase/{customerId}")
+	public void completePurchase(@PathVariable Long customerId) {
+		List<SaleDTO> saleList = queryResource.findAllSaleByCustomerId(customerId);
+		for(SaleDTO s:saleList) {
+			s.setStatus(true);
+			saleService.save(s);
+		}
+	}
 //	@PostMapping("/myTester")
-//	public void Sample()  { 
-//	 log.debug("tesla started");
-//	  String string = "Tesla you are great!!"; 
+//	public void Sample()  {  
+//	  String string = "hello!"; 
 //
 //// Get byte array from string 
 //byte[] bA=string.getBytes();
@@ -311,7 +274,7 @@ public class CommandResource {
 ////	 File file  = new File("src/main/resources/invoice/in.txt");
 ////	 try {
 ////		PrintWriter pW=new PrintWriter(file);
-////		pW.write("Tesla here");pW.close();
+////		pW.write("welcome");pW.close();
 ////	} catch (FileNotFoundException e1) {
 ////		// TODO Auto-generated catch block
 ////		e1.printStackTrace();
@@ -329,7 +292,7 @@ public class CommandResource {
 ////		// TODO Auto-generated catch block
 ////		e.printStackTrace();
 ////	}
-//     log.debug("tesla stoped");
+//     log.debug("completed");
 //	}
 //	
 

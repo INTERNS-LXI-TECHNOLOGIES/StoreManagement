@@ -68,14 +68,11 @@ public class MailService {
             message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
-            File file=null;
-    		try {
-    			 file = ResourceUtils.getFile("classpath:invoice/invoice.pdf");
-    		} catch (FileNotFoundException e1) {
-    			// TODO Auto-generated catch block
-    			e1.printStackTrace();
-    		} 
-            message.addAttachment(file.getName(), file);
+           
+    			  File file=new File("src/main/resources/invoice/invoice.pdf");
+    			  message.addAttachment(file.getName(), file);
+    	 
+            
             
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);

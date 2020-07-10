@@ -88,8 +88,7 @@ public class QueryServiceImpl implements QueryService {
                 e.printStackTrace();
             }
             
- 	  JasperPrint jp = JasperFillManager.fillReport(jr, parameters, conn);
- 	 JasperExportManager.exportReportToPdfFile(jp,"src/main/resources/invoice/invoice.pdf");
+ 	  JasperPrint jp = JasperFillManager.fillReport(jr, parameters, conn); 
  	  return JasperExportManager.exportReportToPdf(jp);
 	}
 	     	
