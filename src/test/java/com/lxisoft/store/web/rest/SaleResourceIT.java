@@ -49,6 +49,9 @@ public class SaleResourceIT {
     private static final String DEFAULT_PRODUCT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_PRODUCT_NAME = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
     @Autowired
     private SaleRepository saleRepository;
 
@@ -78,7 +81,8 @@ public class SaleResourceIT {
             .date(DEFAULT_DATE)
             .amount(DEFAULT_AMOUNT)
             .unitCost(DEFAULT_UNIT_COST)
-            .productName(DEFAULT_PRODUCT_NAME);
+            .productName(DEFAULT_PRODUCT_NAME)
+            .status(DEFAULT_STATUS);
         return sale;
     }
     /**
@@ -93,7 +97,8 @@ public class SaleResourceIT {
             .date(UPDATED_DATE)
             .amount(UPDATED_AMOUNT)
             .unitCost(UPDATED_UNIT_COST)
-            .productName(UPDATED_PRODUCT_NAME);
+            .productName(UPDATED_PRODUCT_NAME)
+            .status(UPDATED_STATUS);
         return sale;
     }
 
@@ -122,6 +127,7 @@ public class SaleResourceIT {
         assertThat(testSale.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testSale.getUnitCost()).isEqualTo(DEFAULT_UNIT_COST);
         assertThat(testSale.getProductName()).isEqualTo(DEFAULT_PRODUCT_NAME);
+        assertThat(testSale.isStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -160,7 +166,8 @@ public class SaleResourceIT {
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].unitCost").value(hasItem(DEFAULT_UNIT_COST.doubleValue())))
-            .andExpect(jsonPath("$.[*].productName").value(hasItem(DEFAULT_PRODUCT_NAME)));
+            .andExpect(jsonPath("$.[*].productName").value(hasItem(DEFAULT_PRODUCT_NAME)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
     
     @Test
@@ -178,7 +185,8 @@ public class SaleResourceIT {
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.unitCost").value(DEFAULT_UNIT_COST.doubleValue()))
-            .andExpect(jsonPath("$.productName").value(DEFAULT_PRODUCT_NAME));
+            .andExpect(jsonPath("$.productName").value(DEFAULT_PRODUCT_NAME))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
     }
     @Test
     @Transactional
@@ -205,7 +213,8 @@ public class SaleResourceIT {
             .date(UPDATED_DATE)
             .amount(UPDATED_AMOUNT)
             .unitCost(UPDATED_UNIT_COST)
-            .productName(UPDATED_PRODUCT_NAME);
+            .productName(UPDATED_PRODUCT_NAME)
+            .status(UPDATED_STATUS);
         SaleDTO saleDTO = saleMapper.toDto(updatedSale);
 
         restSaleMockMvc.perform(put("/api/sales")
@@ -222,6 +231,7 @@ public class SaleResourceIT {
         assertThat(testSale.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testSale.getUnitCost()).isEqualTo(UPDATED_UNIT_COST);
         assertThat(testSale.getProductName()).isEqualTo(UPDATED_PRODUCT_NAME);
+        assertThat(testSale.isStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

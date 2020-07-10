@@ -37,7 +37,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/StoreManagement?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/storemanagement?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: root
     hikari:
@@ -65,7 +65,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username:  ajay.e.s@lxisoft.com
-    password:  abcd1234#
+    password:  ajayrahul369#
     protocol: smtp
     tls: true
     properties.mail.smtp:

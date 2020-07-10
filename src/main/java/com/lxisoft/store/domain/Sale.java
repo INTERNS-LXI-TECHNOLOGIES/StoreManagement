@@ -35,6 +35,9 @@ public class Sale implements Serializable {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "sales", allowSetters = true)
     private Customer customer;
@@ -121,6 +124,19 @@ public class Sale implements Serializable {
         this.productName = productName;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public Sale status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
@@ -187,6 +203,7 @@ public class Sale implements Serializable {
             ", amount=" + getAmount() +
             ", unitCost=" + getUnitCost() +
             ", productName='" + getProductName() + "'" +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

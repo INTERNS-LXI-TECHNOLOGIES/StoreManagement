@@ -31,7 +31,8 @@ entity Sale{
 	date Instant,
 	amount Double,
 	unitCost Double,
-	productName String
+	productName String,
+	status Boolean
 	}
 	
 entity Customer{

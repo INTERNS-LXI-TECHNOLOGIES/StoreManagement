@@ -3,18 +3,14 @@
  */
 package com.lxisoft.store.web.rest;
 
-import com.lxisoft.store.service.CartService;
+import com.lowagie.text.Header;
+import com.lxisoft.store.service.CartService; 
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.QueryService;
+import com.lxisoft.store.service.SaleService;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.List; 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.ResourceUtils;
+import org.springframework.http.ResponseEntity; 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
+import com.lxisoft.store.service.dto.SaleDTO;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * 
@@ -47,6 +44,8 @@ public class QueryResource {
 	ProductService productService;
 	@Autowired
 	private CartService cartService;
+	@Autowired
+	private SaleService saleService;
 	@Autowired
 	private QueryService queryService;
 	
@@ -87,12 +86,12 @@ public class QueryResource {
        
         byte[] pdfContents = null;
       
-        if(customerId !=null) {
-    	  System.out.println(">>>>>>>>>>>>>>>>>>>>>>> + customerId!=null");
+        if(customerId !=null) { 
 		  
 	      try
 	      {
 	    	  pdfContents=queryService.getReportAsPdfUsingDataBase(customerId);
+	    	 
 	      }catch(JRException e) {
 	            e.printStackTrace();
 	      }
@@ -104,11 +103,8 @@ public class QueryResource {
 		headers.add("content-disposition", "attachment; filename=" + fileName);
 		ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
 		            pdfContents, headers, HttpStatus.OK);	
-		log.debug("!!!!!!!!!!!!!!!!!Success!!!!!!!!!!!!!!!!!!!!!!!!!");
-		
-  		 
-  	       
-        return response;
+		 
+  	    return response;
     }
 
 	/**
@@ -128,6 +124,7 @@ public class QueryResource {
 		}
 		return resultantproduct;
 	}
+ 
 
 	/**
 	 * To get number of stocks by using particular category id
@@ -168,5 +165,20 @@ public class QueryResource {
 		 }
 		return cartListResult;
 	}
-
+	@GetMapping("/findAllSaleByCustomerId/{customerId}")
+	public List<SaleDTO> findAllSaleByCustomerId(@PathVariable Long customerId) {
+		log.debug("<<<<< findAllSaleByCustomerId >>>>>>");
+		List<SaleDTO> saleList = saleService.findAll();		
+		List<SaleDTO> saleListResult=new ArrayList<SaleDTO>(); 
+		 for (int i=0;i< saleList.size();i++) { 
+			if (saleList.get(i).getCustomerId() == customerId) {
+				saleListResult.add(saleList.get(i));
+				 
+			}
+		 }
+		return saleListResult;
+	}
 }
+
+
+

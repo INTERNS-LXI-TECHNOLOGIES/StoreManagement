@@ -2,37 +2,73 @@
  * 
  */
 package com.lxisoft.store.web.rest;
- 
-import com.lxisoft.store.service.CartService; 
+
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Cell;
+import com.lowagie.text.Document;
+
+//import com.lowagie.text.Document;
+
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfDocument;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lxisoft.store.service.CartService;
 import com.lxisoft.store.service.QueryService;
 import com.lxisoft.store.service.MailService;
 import com.lxisoft.store.service.ProductService;
 import com.lxisoft.store.service.UserService;
 import com.lxisoft.store.service.SaleService;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.border.Border;
+import javax.xml.parsers.DocumentBuilder;
+import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController; 
+import org.springframework.web.bind.annotation.RestController;
+import org.w3c.dom.NodeList;
+
 import com.lxisoft.store.service.dto.CartDTO;
 import com.lxisoft.store.service.dto.ProductDTO;
 import com.lxisoft.store.service.dto.SaleDTO;
 
-import net.sf.jasperreports.engine.JRException; 
- 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.util.Base64Util;
 
 /**
  *  
@@ -45,7 +81,7 @@ public class CommandResource {
 	private Logger log = LoggerFactory.getLogger(CommandResource.class);
 	@Autowired
 	private ProductService productService;
-	 
+
 	@Autowired
 	private SaleService saleService;
 	@Autowired
@@ -56,6 +92,9 @@ public class CommandResource {
 	private UserService userService;
 	@Autowired
 	private QueryService queryService;
+	@Autowired
+	private QueryResource queryResource;
+
 	/**
 	 * Add the list of product to cart
 	 * 
@@ -95,6 +134,7 @@ public class CommandResource {
 			sale.setNoOfProduct(cart.getNoOfProduct());
 			sale.setProductId(cart.getProductId());
 			sale.setProductName(cart.getProductName());
+			sale.setStatus(false);
 			product = productService.findOne(cart.getProductId());
 			sale.setUnitCost(product.get().getPrice());
 			sale.setStoreId(product.get().getStoreId());
@@ -105,31 +145,192 @@ public class CommandResource {
 			} else
 				productList.add(product.get());
 		}
+		Double totalAmount=0.0;
 		if (sucessFlag) {
 			for (int i = 0; i < productList.size(); i++) {
 				ProductDTO p = productList.get(i);
 				p.setNoOfStock(p.getNoOfStock() - cartDTO.get(i).getNoOfProduct());
 				cartService.delete(cartDTO.get(i).getId());
-				productService.save(p);				
+				productService.save(p);
+				totalAmount=saveBillByCustomerId(customerId);
+				salesList.get(i).setStatus(true);
 				saleService.save(salesList.get(i));
 			}
 		}
-		 /*Sending report to mail*/ 
+		/* Sending report to mail */
 		try {
 			queryService.getReportAsPdfUsingDataBase(customerId);
+
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String mailId=userService.getUserWithAuthorities(customerId).get().getEmail();
-		String subject="Shopping Bill";
-		String content="Sucess";
-		
-	//	String content=queryService.getReportAsPdfUsingDataBase(customerId);
-		mailService.sendEmail(mailId, subject, content,true, true);
-		 
-		log.debug("<<!!!!!!!!!!"+mailId+"!!!!!!!!!!!!!>>");
+		String mailId = userService.getUserWithAuthorities(customerId).get().getEmail();
+		String subject = "Shopping Bill";
+		String content = "Dear customer,\nYour Total Amount:"+totalAmount;
+
+		// String content=queryService.getReportAsPdfUsingDataBase(customerId);
+		mailService.sendEmail(mailId, subject, content, true, true);
+
+		log.debug("<<!!!!!!!!!!" + mailId + "!!!!!!!!!!!!!>>");
 		return sucessFlag;
 	}
+
+	@PostMapping("/myTesters/{customerId}")
+	public Double saveBillByCustomerId(@PathVariable Long customerId) {
+		Double total = 0.0;
+		Document pdfDoc = new Document(PageSize.A4);
+		try {
+			PdfWriter.getInstance(pdfDoc, new FileOutputStream("src/main/resources/invoice/invoice.pdf"))
+					.setPdfVersion(PdfWriter.PDF_VERSION_1_7);
+			pdfDoc.open();
+			Font myfont = new Font();
+			myfont.setStyle(Font.BOLD);
+			myfont.setSize(11);
+			pdfDoc.add(new Paragraph("\n"));
+			List<SaleDTO> saleList = queryResource.findAllSaleByCustomerId(customerId);
+			
+			Table table= new Table(5);
+
+			table.addCell(" SLNO ");
+			table.addCell(" Product Name ");
+			table.addCell(" Quatity ");
+			table.addCell(" Unit Cost ");
+			table.addCell(" Amount ");
+			
+			for (Integer i = 1; i <= saleList.size(); i++) {
+				table.addCell(i.toString());
+				table.addCell(saleList.get(i - 1).getProductName());
+				table.addCell(saleList.get(i - 1).getAmount().toString());
+				table.addCell(saleList.get(i - 1).getNoOfProduct().toString());
+				table.addCell(saleList.get(i - 1).getAmount().toString());
+				total = total + (saleList.get(i - 1).getAmount());
+			}
+			table.addCell(" NetTotal ");
+			table.addCell(total.toString());
+			pdfDoc.add(table);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		pdfDoc.close();
+		return total;
+	}
+
+//	@PostMapping("/myTester")
+//	public void Sample()  { 
+//	 log.debug("tesla started");
+//	  String string = "Tesla you are great!!"; 
+//
+//// Get byte array from string 
+//byte[] bA=string.getBytes();
+//byte[] bA1=null;
+//try {
+//	  bA1 = queryService.getReportAsPdfUsingDataBase(4L);
+//	if(bA1.equals(null))
+//		log.debug("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//	else
+//		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//} catch (JRException e4) {
+//	// TODO Auto-generated catch block
+//	e4.printStackTrace();
+//}
+//
+//String s =new String(bA1, StandardCharsets.UTF_8);
+//log.debug("@@@@@@@@@@"+s);
+//	 OutputStream os;
+//	try {
+//		os = new FileOutputStream("src/main/resources/invoice/in.txt");
+//		// os.write(bytes);
+//		 os.close(); 
+//	} catch (FileNotFoundException e3) {
+//		// TODO Auto-generated catch block
+//		e3.printStackTrace();
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	} 
+// 
+//	
+//	 Document pdfDoc = new Document(PageSize.A4);
+//		try {
+//			PdfWriter.getInstance(pdfDoc, new FileOutputStream("src/main/resources/invoice/invoice.pdf"))
+//			  .setPdfVersion(PdfWriter.PDF_VERSION_1_7);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (DocumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		pdfDoc.open();
+//		Font myfont = new Font();
+//		myfont.setStyle(Font.NORMAL);
+//		myfont.setSize(11);
+//		try {
+//			pdfDoc.add(new Paragraph("\n"));
+//		} catch (DocumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		BufferedReader br=null;
+//		try {
+//			br = new BufferedReader(new FileReader("src/main/resources/invoice/in.txt"));
+//		} catch (FileNotFoundException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		}
+//		String strLine;
+//		try {
+//			while ((strLine = br.readLine()) != null) {
+//			    Paragraph para = new Paragraph(strLine + "\n", myfont);
+//			    para.setAlignment(Element.ALIGN_JUSTIFIED);
+//			    try {
+//					pdfDoc.add(para);
+//				} catch (DocumentException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}	
+//		pdfDoc.close();
+//		try {
+//			br.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	 
+////	 File file  = new File("src/main/resources/invoice/in.txt");
+////	 try {
+////		PrintWriter pW=new PrintWriter(file);
+////		pW.write("Tesla here");pW.close();
+////	} catch (FileNotFoundException e1) {
+////		// TODO Auto-generated catch block
+////		e1.printStackTrace();
+////	}
+////		
+////     try {
+////		if (file.createNewFile()) {
+////		     
+////			log.debug("File has been created.");
+////		 } else {
+////		 
+////			 log.debug("File already exists.");
+////		 }
+////	} catch (IOException e) {
+////		// TODO Auto-generated catch block
+////		e.printStackTrace();
+////	}
+//     log.debug("tesla stoped");
+//	}
+//	
 
 }

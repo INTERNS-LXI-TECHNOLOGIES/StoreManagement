@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<!-- Created with Jaspersoft Studio version 6.13.0.final using JasperReports Library version 6.13.0-46ada4d1be8f3c5985fd0b6146f3ed44caed6f05  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a86131d6-9740-484a-9d19-7e9b3edac346">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter invoice"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src/main/resources/NewDataAdapter.xml"/>
 	<parameter name="cust_id" class="java.lang.Long"/>
 	<queryString language="SQL">
-		<![CDATA[select * from  storemanagement.sale left join  storemanagement.customer on   storemanagement.sale.customer_id = storemanagement.customer.id left join   storemanagement.store on   storemanagement.sale.store_id =  storemanagement.store.id  where  storemanagement.sale.customer_id = $P{cust_id}]]>
+		<![CDATA[select * from   storemanagement.sale  left join  storemanagement.customer on   storemanagement.sale.customer_id = storemanagement.customer.id left join   storemanagement.store on   storemanagement.sale.store_id =  storemanagement.store.id  where  storemanagement.sale.customer_id = $P{cust_id}]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
@@ -185,7 +185,7 @@
 				<reportElement x="-20" y="103" width="615" height="1" uuid="81223a5b-5c08-410e-a4f7-80f9aeb8dbeb"/>
 			</line>
 			<line>
-				<reportElement x="-22" y="-4" width="615" height="1" uuid="302fb9d8-0667-4c2c-a77a-80cce6e107c7"/>
+				<reportElement x="-22" y="179" width="615" height="1" uuid="302fb9d8-0667-4c2c-a77a-80cce6e107c7"/>
 			</line>
 			<line>
 				<reportElement x="-23" y="-3" width="615" height="1" uuid="95b6f759-bcb3-4ce4-8d71-e896ed68a76e"/>

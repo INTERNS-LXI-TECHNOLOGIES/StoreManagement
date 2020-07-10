@@ -20,6 +20,8 @@ public class SaleDTO implements Serializable {
 
     private String productName;
 
+    private Boolean status;
+
 
     private Long customerId;
 
@@ -75,6 +77,14 @@ public class SaleDTO implements Serializable {
         this.productName = productName;
     }
 
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -126,6 +136,7 @@ public class SaleDTO implements Serializable {
             ", amount=" + getAmount() +
             ", unitCost=" + getUnitCost() +
             ", productName='" + getProductName() + "'" +
+            ", status='" + isStatus() + "'" +
             ", customerId=" + getCustomerId() +
             ", productId=" + getProductId() +
             ", storeId=" + getStoreId() +
